@@ -29,7 +29,7 @@ public class Menu_OnItemClickListener implements AdapterView.OnItemClickListener
         if (HomeActivity.appLaunchable){
             Intent launchIntent = new Intent(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            ComponentName cp = new ComponentName(clickedApp.packageName, clickedApp.name);
+            ComponentName cp = new ComponentName(clickedApp.getPackageName(), clickedApp.getName());
             launchIntent.setComponent(cp);
 
             context.startActivity(launchIntent);

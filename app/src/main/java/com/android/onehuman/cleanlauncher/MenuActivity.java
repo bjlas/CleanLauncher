@@ -60,6 +60,7 @@ public class MenuActivity extends AppCompatActivity {
                         pacsList.get(I).loadLabel(packageManager).toString(),
                         pacsList.get(I).activityInfo.name,
                         pacsList.get(I).activityInfo.packageName
+
                 );
                 menuAppsList.add(app);
             }
@@ -69,18 +70,11 @@ public class MenuActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result){
 
-            if (menuAdapter == null){
-
                 menuAdapter = new MenuAdapter(activity, menuAppsList);
                 menuListView.setAdapter(menuAdapter);
 
                 menu_onItemClickListener = new Menu_OnItemClickListener(activity, menuAppsList);
                 menuListView.setOnItemClickListener(menu_onItemClickListener);
-
-
-            }else{
-
-            }
 
         }
 

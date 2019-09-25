@@ -5,40 +5,38 @@ import java.util.UUID;
 
 public class App implements Serializable, Comparable<App> {
 
-    public long id;
-    public String label;
-    public String name;
-    public String packageName;
+    private String label;
+    private String name;
+    private String packageName;
+    private int position;
+    private boolean notification;
 
 
     public App(String l, String n, String pn) {
         this.label=l;
         this.name=n;
         this.packageName=pn;
+        notification=false;
     }
 
-    public App(long id, String l, String n, String pn) {
-        id = id;
-        this.label=l;
-        this.name=n;
-        this.packageName=pn;
-    }
 
-    public long getId() { return id; }
     public String getLabel() { return label; }
     public String getName() { return name; }
     public String getPackageName() { return packageName; }
+    public boolean getNotification() { return notification; }
+    public void setNotification(boolean notification) { this.notification = notification; }
+
 
     @Override
     public boolean equals(Object obj) {
-        return (this.label.equals(((App) obj).label)
-                && this.name.equals(((App) obj).name)
-                && this.packageName.equals(((App) obj).packageName));
+        return (this.packageName.equals(((App) obj).packageName));
     }
 
     @Override
     public int compareTo(App other) {
         return label.compareTo(other.label);
     }
+
+
 
 }

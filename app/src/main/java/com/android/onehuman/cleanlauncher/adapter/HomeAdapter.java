@@ -1,11 +1,13 @@
 package com.android.onehuman.cleanlauncher.adapter;
 
+import android.content.Context;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -15,6 +17,7 @@ import com.android.onehuman.cleanlauncher.R;
 import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.persistence.DBController;
 
 
 import java.util.ArrayList;
@@ -24,10 +27,17 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     private ArrayList<App> appList;
     private OnHomeClickListener onHomeClickListener;
     private ItemTouchHelper itemTouchHelper;
+    private DBController dbController;
 
-    public HomeAdapter(ArrayList<App> al, OnHomeClickListener onHomeClickListener) {
+    public HomeAdapter(Context context, ArrayList<App> al, OnHomeClickListener onHomeClickListener) {
         this.appList = al;
         this.onHomeClickListener = onHomeClickListener;
+        dbController = new DBController(context);
+    }
+
+    public void updateAppList(ArrayList<App> al) {
+        this.appList = al;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -39,7 +49,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-            holder.label.setText(appList.get(position).label);
+            holder.label.setText(appList.get(position).getLabel());
+
+            if (appList.get(position).getNotification()) {
+                holder.notification.setVisibility(View.VISIBLE);
+            } else {
+                holder.notification.setVisibility(View.INVISIBLE);
+            }
     }
 
     @Override
@@ -58,6 +74,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onItemSwiped(int position) {
+        dbController.delete(appList.get(position).getPackageName());
         appList.remove(position);
         notifyItemRemoved(position);
     }
@@ -74,12 +91,16 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     {
 
         public TextView label;
+        public TextView notification;
+
         OnHomeClickListener onHomeClickListener;
         GestureDetector gestureDetector;
 
         public HomeViewHolder(View itemView, OnHomeClickListener ocl) {
             super(itemView);
             label = itemView.findViewById(R.id.home_item_label);
+            notification = itemView.findViewById(R.id.home_item_notification);
+
             onHomeClickListener = ocl;
             gestureDetector = new GestureDetector(itemView.getContext(), this);
             itemView.setOnTouchListener(this);

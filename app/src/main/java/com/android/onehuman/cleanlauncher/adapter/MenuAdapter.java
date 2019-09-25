@@ -2,11 +2,13 @@ package com.android.onehuman.cleanlauncher.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -57,22 +59,28 @@ public class MenuAdapter extends BaseAdapter {
         TextView addToHomeButton = (TextView) convertView.findViewById(R.id.menu_item_addToHome_button);
         TextView uninstallButton = (TextView) convertView.findViewById(R.id.menu_item_uninstall_button);
 
-        menu_item_label.setText(app.label);
+        menu_item_label.setText(app.getLabel());
 
 
         addToHomeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dbController.insert(app.label, app.name, app.packageName);
-                Toast.makeText(context, app.label + " added to Home", Toast.LENGTH_SHORT).show();
+
+                if(dbController.insert(app.getLabel(), app.getName(), app.getPackageName())){
+                    Toast.makeText(context, context.getString(R.string.app_added_to_home)+app.getLabel(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, context.getString(R.string.app_already_exist_at_home)+app.getLabel(), Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
         uninstallButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //TODO DELETE APP IF IT IS UNINSTALL
                     Intent intent = new Intent(Intent.ACTION_DELETE);
-                    intent.setData(Uri.parse("package:" + appList.get(position).packageName));
+                    intent.setData(Uri.parse("package:" + appList.get(position).getPackageName()));
                     context.startActivity(intent);
                 }
         });
