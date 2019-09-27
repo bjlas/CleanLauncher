@@ -60,21 +60,36 @@ public class MenuActivity extends AppCompatActivity {
                         pacsList.get(I).loadLabel(packageManager).toString(),
                         pacsList.get(I).activityInfo.name,
                         pacsList.get(I).activityInfo.packageName
-
                 );
                 menuAppsList.add(app);
             }
             return null;
         }
 
+
+
         @Override
         protected void onPostExecute(String result){
+            menuAdapter = new MenuAdapter(activity);
+            menuListView.setAdapter(menuAdapter);
 
-                menuAdapter = new MenuAdapter(activity, menuAppsList);
-                menuListView.setAdapter(menuAdapter);
+            addAppsAndHeaders();
+            String s = "";
+        }
 
-                menu_onItemClickListener = new Menu_OnItemClickListener(activity, menuAppsList);
-                menuListView.setOnItemClickListener(menu_onItemClickListener);
+        private void addAppsAndHeaders() {
+
+            String lastHeader="";
+
+            for (App app: menuAppsList) {
+
+                if(!lastHeader.equals(app.getLabel().substring(0,1).toUpperCase())) {
+                    lastHeader = app.getLabel().substring(0,1).toUpperCase();
+                    menuAdapter.addSectionHeaderItem(new App(lastHeader));
+                }
+
+                menuAdapter.addApp(app);
+            }
 
         }
 

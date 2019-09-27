@@ -11,25 +11,23 @@ import com.android.onehuman.cleanlauncher.model.App;
 
 import java.util.List;
 
-public class Menu_OnItemClickListener implements AdapterView.OnItemClickListener {
+public class Menu_OnItemClickListener implements AdapterView.OnClickListener {
 
     private Context context;
-    private List<App> menuAppsList;
+    private App app;
 
-    public Menu_OnItemClickListener(Context c, List<App> al) {
+    public Menu_OnItemClickListener(Context c, App a) {
         context = c;
-        menuAppsList=al;
+        app=a;
     }
 
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-        App clickedApp = (App) menuAppsList.get(position);
+    public void onClick(View view) {
 
         if (HomeActivity.appLaunchable){
             Intent launchIntent = new Intent(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            ComponentName cp = new ComponentName(clickedApp.getPackageName(), clickedApp.getName());
+            ComponentName cp = new ComponentName(app.getPackageName(), app.getName());
             launchIntent.setComponent(cp);
 
             context.startActivity(launchIntent);

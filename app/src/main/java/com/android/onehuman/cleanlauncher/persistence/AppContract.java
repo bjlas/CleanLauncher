@@ -13,6 +13,7 @@ public class AppContract {
         public static final String COLUMN_LABEL = "label";
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PACKAGENAME = "packageName";
+        public static final String COLUMN_POSITION = "position";
     }
 
 }

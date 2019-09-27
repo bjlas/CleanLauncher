@@ -49,9 +49,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
-            holder.label.setText(appList.get(position).getLabel());
+           // holder.label.setText(appList.get(position).getLabel());
 
-            if (appList.get(position).getNotification()) {
+        holder.label.setText(appList.get(position).getPosition() +":"+ appList.get(position).getLabel());
+
+
+        if (appList.get(position).getNotification()) {
                 holder.notification.setVisibility(View.VISIBLE);
             } else {
                 holder.notification.setVisibility(View.INVISIBLE);
@@ -66,9 +69,19 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
-        App app = appList.get(fromPosition);
-        appList.remove(app);
-        appList.add(toPosition, app);
+
+        App app_origin = appList.get(fromPosition);
+        App app_dest = appList.get(toPosition);
+
+        app_origin.setPosition(toPosition);
+        app_dest.setPosition(fromPosition);
+
+        dbController.update(app_origin, toPosition);
+        dbController.update(app_dest, fromPosition);
+
+        appList.remove(app_origin);
+        appList.add(toPosition, app_origin);
+
         notifyItemMoved(fromPosition, toPosition);
     }
 
@@ -76,6 +89,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     public void onItemSwiped(int position) {
         dbController.delete(appList.get(position).getPackageName());
         appList.remove(position);
+        dbController.updateAll(appList);
         notifyItemRemoved(position);
     }
 
