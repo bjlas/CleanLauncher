@@ -4,8 +4,8 @@ android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.android.onehuman.cleanlauncher"
-        minSdkVersion 19
-        targetSdkVersion 29
+        minSdkVersion 15
+        targetSdkVersion 16
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

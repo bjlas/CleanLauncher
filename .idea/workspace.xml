@@ -11,7 +11,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="de6be976-46d6-41e9-b44d-264a7e0dfa6b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/viewHolders/MenuViewHolder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/fileHashes/fileHashes.bin" afterDir="false" />
@@ -19,20 +20,18 @@
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/classAnalysis.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/5.4.1/javaCompile/javaCompile.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/build_file_checksums.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/caches/gradle_models.ser" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/HomeAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/HomeAdapter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/App.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/AppContract.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/AppContract.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBController.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBHelper.java" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBHelper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_mixed.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/local.properties" beforeDir="false" afterPath="$PROJECT_DIR$/local.properties" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -66,42 +65,76 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/home_activity.xml">
-          <provider editor-type-id="android-designer2" />
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-70">
-              <caret line="31" column="64" selection-start-line="31" selection-start-column="64" selection-end-line="31" selection-end-column="64" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="30">
-              <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+            <state relative-caret-position="200">
+              <caret line="80" column="52" selection-start-line="80" selection-start-column="52" selection-end-line="80" selection-end-column="52" />
               <folding>
-                <element signature="e#3364#4003#0" expanded="true" />
-                <element signature="e#4002#4003#0" expanded="true" />
-                <element signature="e#4062#4471#0" expanded="true" />
-                <element signature="e#4470#4471#0" expanded="true" />
+                <element signature="e#2912#2988#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="295">
-              <caret line="29" selection-start-line="29" selection-end-line="29" />
+            <state relative-caret-position="-359">
+              <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="314">
+              <caret line="21" column="63" selection-start-line="21" selection-start-column="63" selection-end-line="21" selection-end-column="63" />
+              <folding>
+                <element signature="e#1762#2293#0" expanded="true" />
+                <element signature="e#1924#1969#0" expanded="true" />
+                <element signature="e#2083#2136#0" expanded="true" />
+                <element signature="e#2292#2293#0" expanded="true" />
+                <element signature="e#2347#2654#0" expanded="true" />
+                <element signature="e#2653#2654#0" expanded="true" />
+                <element signature="e#2640#2641#0" expanded="true" />
+                <element signature="e#2677#2678#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/viewHolders/MenuViewHolder.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="105">
+              <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml">
+          <provider editor-type-id="android-designer2" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="75">
+              <caret line="5" column="26" lean-forward="true" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+              <folding>
+                <element signature="e#267#306#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="12" lean-forward="true" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
             </state>
           </provider>
         </entry>
@@ -112,34 +145,20 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="layoutResourceFile_vertical" />
+        <option value="valueResourceFile" />
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>android.intent.action.PACKAGE_REMOVED</find>
-      <find>initAppsList</find>
-      <find>setAppList</find>
-      <find>system</find>
-      <find>boolean</find>
-      <find>home_load</find>
-      <find>app_added_to_home</find>
-      <find>uninstall_button</find>
-      <find>home_layout</find>
-      <find>home_acti</find>
-      <find>home_recyclerview</find>
-      <find>user-per</find>
-      <find>com.android.onehuman.NOTIFICATION_LISTENER</find>
-      <find>Msg</find>
-      <find>classpath</find>
       <find>settext</find>
       <find>registerReceiver</find>
       <find>registerreci</find>
       <find>addOnAppsChangedCallback</find>
       <find>MenuAdapter</find>
       <find>getView</find>
-      <find>menu_listview</find>
       <find>Menu_OnItemClickListener</find>
       <find>new App</find>
       <find>insert</find>
@@ -148,6 +167,22 @@
       <find>dbController</find>
       <find>delete</find>
       <find>sectionHeader</find>
+      <find>log</find>
+      <find>menu_listview</find>
+      <find>homeRecyclerView</find>
+      <find>menuListView</find>
+      <find>context</find>
+      <find>recycler_section_header_height</find>
+      <find>headerOffset</find>
+      <find>getItemOffsets</find>
+      <find>isSection</find>
+      <find>SectionCallback</find>
+      <find>menu_header</find>
+      <find>outRect</find>
+      <find>Toast.</find>
+      <find>sticky</find>
+      <find>onCreateViewHolder</find>
+      <find>getItemViewType</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -177,20 +212,24 @@
         <option value="$PROJECT_DIR$/app/src/main/res/layout/home_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/Header.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuItem.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_AddToHomeOnClickListener.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_mixed.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/AppContract.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBHelper.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/App.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBController.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/HomeAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/HomeHeader.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/App.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/interfaces/SectionCallback.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/dimens.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/viewHolders/MenuViewHolder.java" />
       </list>
     </option>
   </component>
@@ -204,8 +243,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <expand>
@@ -236,7 +274,7 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
               <item name="cleanlauncher" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="events" type="462c0819:PsiDirectoryNode" />
+              <item name="interfaces" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CleanLauncher" type="1abcf292:AndroidViewProjectNode" />
@@ -250,7 +288,7 @@
               <item name="app" type="feadf853:AndroidModuleNode" />
               <item name="java" type="edd41e36:AndroidSourceTypeNode" />
               <item name="cleanlauncher" type="cbb59c9e:AndroidPsiDirectoryNode" />
-              <item name="persistence" type="462c0819:PsiDirectoryNode" />
+              <item name="viewHolders" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="CleanLauncher" type="1abcf292:AndroidViewProjectNode" />
@@ -263,11 +301,18 @@
               <item name="res" type="d4f16f75:AndroidResFolderNode" />
               <item name="layout" type="ddeffd01:AndroidResFolderTypeNode" />
             </path>
+            <path>
+              <item name="CleanLauncher" type="1abcf292:AndroidViewProjectNode" />
+              <item name="app" type="feadf853:AndroidModuleNode" />
+              <item name="res" type="d4f16f75:AndroidResFolderNode" />
+              <item name="values" type="ddeffd01:AndroidResFolderTypeNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -286,15 +331,16 @@
     <option name="MODULE_TAB" value="Default Config" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
-    </key>
-    <key name="CopyClassDialog.RECENTS_KEY">
-      <recent name="com.android.onehuman.cleanlauncher.events" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
       <recent name="$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.android.onehuman.cleanlauncher.model" />
+      <recent name="com.android.onehuman.cleanlauncher.events" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -398,7 +444,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" side_tool="true" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.1788269" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.1788269" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info id="Build Variants" order="4" side_tool="true" />
@@ -407,14 +453,14 @@
       <window_info id="Resources Explorer" order="7" />
       <window_info id="Capture Tool" order="8" />
       <window_info anchor="bottom" id="Version Control" order="0" weight="0.3299363" />
-      <window_info active="true" anchor="bottom" id="Logcat" order="1" visible="true" weight="0.35159236" />
+      <window_info anchor="bottom" id="Logcat" order="1" sideWeight="0.49928468" weight="0.41910827" />
       <window_info anchor="bottom" id="TODO" order="2" weight="0.3299363" />
       <window_info anchor="bottom" id="Terminal" order="3" weight="0.3299363" />
-      <window_info anchor="bottom" id="Event Log" order="4" side_tool="true" />
-      <window_info anchor="bottom" id="Build" order="5" weight="0.3057325" />
+      <window_info anchor="bottom" id="Event Log" order="4" sideWeight="0.5007153" side_tool="true" weight="0.49299362" />
+      <window_info anchor="bottom" id="Build" order="5" sideWeight="0.49928468" visible="true" weight="0.15159236" />
       <window_info anchor="bottom" id="Android Profiler" order="6" weight="0.3299363" />
-      <window_info anchor="bottom" id="Run" order="7" weight="0.5299363" />
-      <window_info anchor="bottom" id="Debug" order="8" weight="0.04713376" />
+      <window_info anchor="bottom" id="Run" order="7" weight="0.23312102" />
+      <window_info anchor="bottom" id="Debug" order="8" weight="0.29808918" />
       <window_info anchor="bottom" id="Find" order="9" weight="0.3299363" />
       <window_info anchor="right" id="Device File Explorer" order="0" sideWeight="0.50187266" side_tool="true" weight="0.3297568" />
       <window_info anchor="right" id="Capture Analysis" order="1" />
@@ -445,42 +491,15 @@
           <properties />
           <option name="timeStamp" value="34" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java</url>
-          <line>29</line>
-          <properties />
-          <option name="timeStamp" value="41" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java</url>
-          <line>76</line>
-          <properties />
-          <option name="timeStamp" value="42" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java</url>
-          <line>65</line>
-          <properties />
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="app">
+        <watch expression="menuAppsList" language="JAVA" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/drawable/icon_added_to_home.xml" />
-    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/content/Intent.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="126" column="53" selection-start-line="126" selection-start-column="31" selection-end-line="126" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/UninstallReceiver.java" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/actionbar_set_wallpaper.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/add_list_item.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/all_apps_button.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/application.xml" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/apps_customize_application.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/apps_customize_pane.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/apps_customize_progressbar.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/appwidget_error.xml" />
@@ -550,6 +569,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest" />
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="384">
           <caret line="34" column="18" lean-forward="true" selection-start-line="34" selection-start-column="18" selection-end-line="34" selection-end-column="18" />
@@ -558,7 +578,6 @@
           </folding>
         </state>
       </provider>
-      <provider editor-type-id="android-manifest" />
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/service/NotificationService.java">
       <provider selected="true" editor-type-id="text-editor">
@@ -572,7 +591,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuItem.java" />
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_AddToHomeOnClickListener.java" />
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java" />
     <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/widget/BaseAdapter.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="465">
@@ -592,15 +610,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/app/Activity.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#34696#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/widget/ListView.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="157">
@@ -612,56 +621,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/os/AsyncTask.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="e#0#2364#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml">
-      <provider selected="true" editor-type-id="android-designer2" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="228">
-          <caret line="58" column="37" selection-start-line="58" selection-start-column="37" selection-end-line="58" selection-end-column="37" />
-          <folding>
-            <element signature="e#1380#1406#0" expanded="true" />
-            <element signature="e#2113#2139#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_mixed.xml">
-      <provider editor-type-id="android-designer2" />
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="38" selection-start-line="38" selection-end-line="38" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_mixed.xml" />
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/home_item.xml">
       <provider selected="true" editor-type-id="android-designer2" />
       <provider editor-type-id="text-editor">
         <state relative-caret-position="240">
           <caret line="16" column="41" lean-forward="true" selection-start-line="16" selection-start-column="41" selection-end-line="16" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml">
-      <provider selected="true" editor-type-id="android-designer2" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="4" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml">
-      <provider selected="true" editor-type-id="android-designer2" />
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="16" column="14" selection-start-line="16" selection-start-column="14" selection-end-line="16" selection-end-column="14" />
         </state>
       </provider>
     </entry>
@@ -690,13 +655,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/HomeAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-223">
-          <caret line="88" column="44" selection-start-line="88" selection-start-column="44" selection-end-line="88" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/persistence/DBController.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="734">
@@ -708,17 +666,85 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../standalone-android-launcher3-master/app/src/main/java/com/upchannel/launcher3/Folder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="503" column="42" selection-start-line="503" selection-start-column="39" selection-end-line="503" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/util/Log.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="128">
+          <caret line="66" column="22" selection-start-line="66" selection-start-column="22" selection-end-line="66" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../Launcher1_androidOficial/src/com/android/launcher/Launcher.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="111">
+          <caret line="635" column="13" selection-start-line="635" selection-start-column="13" selection-end-line="635" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../standalone-android-launcher3-master/app/src/main/java/com/upchannel/launcher3/AppFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="15" column="20" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/home_activity.xml">
+      <provider selected="true" editor-type-id="android-designer2" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="24" selection-start-line="24" selection-end-line="33" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/os/AsyncTask.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#2364#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/App.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="51" column="68" selection-start-line="51" selection-start-column="68" selection-end-line="51" selection-end-column="68" />
+        <state relative-caret-position="306">
+          <caret line="44" lean-forward="true" selection-start-line="44" selection-end-line="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_activity.xml">
+      <provider editor-type-id="android-designer2" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="134">
+          <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_item.xml">
+      <provider selected="true" editor-type-id="android-designer2" />
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="870">
+          <caret line="58" column="41" selection-start-line="58" selection-start-column="41" selection-end-line="58" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/HomeAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1295">
+          <caret line="52" selection-start-line="52" selection-end-line="60" selection-end-column="13" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/HomeActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="182">
-          <caret line="53" selection-start-line="53" selection-end-line="53" />
+        <state relative-caret-position="-86">
+          <caret line="122" column="32" selection-start-line="122" selection-start-column="24" selection-end-line="122" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -727,35 +753,95 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/events/Menu_OnItemClickListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="295">
+        <state relative-caret-position="300">
           <caret line="29" selection-start-line="29" selection-end-line="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/Library/Android/sdk/platforms/android-29/android.jar!/android/app/Activity.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="e#0#34696#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/interfaces/SectionCallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/androidx.recyclerview/recyclerview/1.0.0/2151d26c3b241f0a887f2dadb9ab091649fcf020/recyclerview-1.0.0-sources.jar!/androidx/recyclerview/widget/RecyclerView.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="174">
+          <caret line="4909" selection-start-line="4909" selection-end-line="4909" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/MenuActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="72" column="20" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+        <state relative-caret-position="200">
+          <caret line="80" column="52" selection-start-line="80" selection-start-column="52" selection-end-line="80" selection-end-column="52" />
+          <folding>
+            <element signature="e#2912#2988#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/home_activity.xml">
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/dimens.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="12" lean-forward="true" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/menu_header.xml">
       <provider editor-type-id="android-designer2" />
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-70">
-          <caret line="31" column="64" selection-start-line="31" selection-start-column="64" selection-end-line="31" selection-end-column="64" />
+        <state relative-caret-position="75">
+          <caret line="5" column="26" lean-forward="true" selection-start-line="5" selection-start-column="26" selection-end-line="5" selection-end-column="26" />
+          <folding>
+            <element signature="e#267#306#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/model/MenuHeader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-359">
+          <caret line="40" lean-forward="true" selection-start-line="40" selection-end-line="40" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/adapter/MenuAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30">
-          <caret line="80" lean-forward="true" selection-start-line="80" selection-end-line="80" />
+        <state relative-caret-position="314">
+          <caret line="21" column="63" selection-start-line="21" selection-start-column="63" selection-end-line="21" selection-end-column="63" />
           <folding>
-            <element signature="e#3364#4003#0" expanded="true" />
-            <element signature="e#4002#4003#0" expanded="true" />
-            <element signature="e#4062#4471#0" expanded="true" />
-            <element signature="e#4470#4471#0" expanded="true" />
+            <element signature="e#1762#2293#0" expanded="true" />
+            <element signature="e#1924#1969#0" expanded="true" />
+            <element signature="e#2083#2136#0" expanded="true" />
+            <element signature="e#2292#2293#0" expanded="true" />
+            <element signature="e#2347#2654#0" expanded="true" />
+            <element signature="e#2653#2654#0" expanded="true" />
+            <element signature="e#2640#2641#0" expanded="true" />
+            <element signature="e#2677#2678#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/android/onehuman/cleanlauncher/viewHolders/MenuViewHolder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>

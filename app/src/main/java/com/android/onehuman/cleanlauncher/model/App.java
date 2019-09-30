@@ -8,13 +8,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.android.onehuman.cleanlauncher.R;
 import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-public class App implements Serializable, Comparable<App> {
+public class App implements Comparable<App> {
 
     private String label;
     private String name;
@@ -53,13 +55,10 @@ public class App implements Serializable, Comparable<App> {
 
 
     @Override
-    public boolean equals(Object obj) {
-        return (this.packageName.equals(((App) obj).packageName));
-    }
-
-    @Override
-    public int compareTo(App other) {
-        return label.compareTo(other.label);
+    public int compareTo(App app) {
+        return getLabel().toString()
+                .compareTo(app.getLabel()
+                        .toString());
     }
 
 }

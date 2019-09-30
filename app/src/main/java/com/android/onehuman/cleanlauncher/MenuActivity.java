@@ -6,14 +6,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
 import com.android.onehuman.cleanlauncher.events.Menu_OnItemClickListener;
+import com.android.onehuman.cleanlauncher.interfaces.SectionCallback;
 import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.MenuHeader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
 
     private List<App> menuAppsList;
     private MenuAdapter menuAdapter;
-    private ListView menuListView;
+    private RecyclerView menuRecyclerView;
     PackageManager packageManager;
     Menu_OnItemClickListener menu_onItemClickListener;
 
@@ -33,16 +40,17 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
-        menuListView = (ListView) findViewById(R.id.menu_listview);
-
         activity=this;
         packageManager =getPackageManager();
+        menuRecyclerView = (RecyclerView) findViewById(R.id.menu_listview);
+        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        new initAppsList().execute();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        new initAppsList().execute();
     }
 
     public class initAppsList extends AsyncTask<String, Void, String> {
@@ -70,27 +78,30 @@ public class MenuActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result){
-            menuAdapter = new MenuAdapter(activity);
-            menuListView.setAdapter(menuAdapter);
-
-            addAppsAndHeaders();
-            String s = "";
+            menuAdapter = new MenuAdapter(activity, menuAppsList);
+            menuRecyclerView.setAdapter(menuAdapter);
+            MenuHeader menuHeaderList = new MenuHeader(getResources().getDimensionPixelSize(R.dimen.recycler_section_header_height), true, getSectionCallback(menuAppsList));
+            menuRecyclerView.addItemDecoration(menuHeaderList);
         }
 
-        private void addAppsAndHeaders() {
-
-            String lastHeader="";
-
-            for (App app: menuAppsList) {
-
-                if(!lastHeader.equals(app.getLabel().substring(0,1).toUpperCase())) {
-                    lastHeader = app.getLabel().substring(0,1).toUpperCase();
-                    menuAdapter.addSectionHeaderItem(new App(lastHeader));
+        private SectionCallback getSectionCallback(final List<App> apps) {
+            return new SectionCallback() {
+                @Override
+                public boolean isSection(int position) {
+                    return position == 0 || apps.get(position)
+                            .getLabel()
+                            .charAt(0) != apps.get(position - 1)
+                            .getLabel()
+                            .charAt(0);
                 }
 
-                menuAdapter.addApp(app);
-            }
-
+                @Override
+                public CharSequence getSectionHeader(int position) {
+                    return apps.get(position)
+                            .getLabel()
+                            .subSequence(0, 1);
+                }
+            };
         }
 
     }
