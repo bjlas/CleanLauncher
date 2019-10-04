@@ -1,12 +1,5 @@
 package com.android.onehuman.cleanlauncher;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -14,35 +7,35 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
-import android.graphics.Color;
-import android.os.AsyncTask;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.View;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ImageView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.adapter.HomeAdapter;
-import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
+import com.android.onehuman.cleanlauncher.adapter.HomeNotificationAdapter;
 import com.android.onehuman.cleanlauncher.events.HomeItemTouchHelper;
-import com.android.onehuman.cleanlauncher.events.Menu_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.model.App;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
         public class HomeActivity extends AppCompatActivity implements OnHomeClickListener {
 
             public static boolean appLaunchable = true;
             private RecyclerView homeRecyclerView;
+            RecyclerView homeNotificationsRecyclerView;
             private ArrayList<App> homeAppsList  = new ArrayList<>();
+            private ArrayList<App> homeNotificationAppsList  = new ArrayList<>();
+
             private HomeAdapter homeAdapter;
             DBController dbController;
             Activity activity;
@@ -55,7 +48,7 @@ import java.util.List;
                 activity=this;
                 packageManager =getPackageManager();
                 homeRecyclerView = (RecyclerView) findViewById(R.id.home_recyclerview);
-
+                homeNotificationsRecyclerView = (RecyclerView)findViewById(R.id.homeNotification_recyclerview);
                 LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
                 homeRecyclerView.setLayoutManager(linearLayoutManager);
                 dbController = new DBController(activity);
@@ -69,6 +62,28 @@ import java.util.List;
                 LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("NOTIFICATION_POSTED"));
                 LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("NOTIFICATION_REMOVED"));
 
+
+
+
+
+
+
+
+                LinearLayoutManager HorizontalLayout = new LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false);
+                homeNotificationsRecyclerView.setLayoutManager(HorizontalLayout);
+
+                homeNotificationAppsList.add(new App("App1","App1","App1",1,1));
+                homeNotificationAppsList.add(new App("App2","App2","App2",2,2));
+                homeNotificationAppsList.add(new App("App3","App3","App3",2,2));
+                homeNotificationAppsList.add(new App("App1","App1","App1",1,1));
+                homeNotificationAppsList.add(new App("App2","App2","App2",2,2));
+                homeNotificationAppsList.add(new App("App3","App3","App3",2,2));
+                homeNotificationAppsList.add(new App("App1","App1","App1",1,1));
+                homeNotificationAppsList.add(new App("App2","App2","App2",2,2));
+                homeNotificationAppsList.add(new App("App3","App3","App3",2,2));
+
+                HomeNotificationAdapter homeNotificationAdapter = new HomeNotificationAdapter(homeNotificationAppsList);
+                homeNotificationsRecyclerView.setAdapter(homeNotificationAdapter);
 
             }
 
@@ -125,6 +140,8 @@ import java.util.List;
                 startActivity(menuIntent);
             }
 
+
+
             @Override
             public void onHomeClick(int position) {
                 App apptoLaunch = homeAppsList.get(position);
@@ -142,28 +159,38 @@ import java.util.List;
 
                 @Override
                 public void onReceive(Context context, Intent intent) {
+                    String packageName = intent.getStringExtra("package");
+
 
                     if (intent.getAction().equals("NOTIFICATION_POSTED")) {
-                        String packageName = intent.getStringExtra("package");
-                        updateNotification(packageName, true);
-                        homeAdapter.updateAppList(homeAppsList);
+                        getIcon(packageName);
+                        dbController.increaseNotificationValue(packageName);
                     }
 
                     if (intent.getAction().equals("NOTIFICATION_REMOVED")) {
-                        String packageName = intent.getStringExtra("package");
-                        updateNotification(packageName, false);
-                        homeAdapter.updateAppList(homeAppsList);
+                        dbController.clearNotifications(packageName);
                     }
+
+                    homeAppsList = dbController.getAll();
+                    homeAdapter.updateAppList(homeAppsList);
 
                 }
 
-                private void updateNotification(String packageName, boolean update) {
-                    for(App app : homeAppsList) {
-                        if(app.getPackageName().equals(packageName)) {
-                            app.setNotification(update);
-                        }
-                    }
-                }
+
             };
+
+            private void getIcon(String packageName) {
+                Drawable appicon = null;
+                try {
+                    appicon = getPackageManager().getApplicationLogo(packageName);
+
+                    ImageView noti = (ImageView) findViewById(R.id.homeNotification_recyclerview);
+
+                    noti.setImageDrawable(appicon);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+            }
 
         }

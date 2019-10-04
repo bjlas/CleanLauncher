@@ -3,4 +3,13 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="color_home_notification_on_background">#4d4d4d</color>
+    <color name="color_home_notification_on_text">#FFFFFF</color>
+    <color name="color_home_notification_off_text">#4d4d4d</color>
+
+    <color name="color_menu_notification_on_text">#FF9800</color>
+    <color name="color_menu_notification_off_text">#4d4d4d</color>
+
+
 </resources>

@@ -46,9 +46,9 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder> {
     @Override
     public void onBindViewHolder(MenuViewHolder holder, int position) {
         final App app = appList.get(position);
+
         holder.label.setText(app.getLabel());
-
-
+        
         holder.label.setOnClickListener(new Menu_OnItemClickListener(context, app));
 
         holder.addToHomeButton.setOnClickListener(new View.OnClickListener() {

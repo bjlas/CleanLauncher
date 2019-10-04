@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper dbHelper;
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 5;
     private static final String DATABASE_NAME = "CleanLauncherDB.db";
 
 
@@ -32,6 +32,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + AppContract.AppEntry.COLUMN_LABEL + " TEXT NOT NULL,"
                 + AppContract.AppEntry.COLUMN_NAME + " TEXT NOT NULL,"
                 + AppContract.AppEntry.COLUMN_POSITION + " INTEGER NOT NULL,"
+                + AppContract.AppEntry.COLUMN_NOTIFICATION + " INTEGER NOT NULL,"
                 + "UNIQUE (" + AppContract.AppEntry.COLUMN_PACKAGENAME + "))");
     }
 

@@ -22,25 +22,21 @@ public class App implements Comparable<App> {
     private String name;
     private String packageName;
     private int position;
-    private boolean notification;
-
-    public App(String l) {
-        this.label=l;
-    }
+    private int notification;
 
     public App(String l, String n, String pn) {
         this.label=l;
         this.name=n;
         this.packageName=pn;
-        notification=false;
+        notification=0;
     }
 
-    public App(String l, String n, String pn, int p) {
+    public App(String l, String n, String pn, int p, int noti) {
         this.label=l;
         this.name=n;
         this.packageName=pn;
         this.position=p;
-        notification=false;
+        this.notification=noti;
     }
 
 
@@ -49,8 +45,8 @@ public class App implements Comparable<App> {
     public String getPackageName() { return packageName; }
     public int getPosition() { return position; }
 
-    public boolean getNotification() { return notification; }
-    public void setNotification(boolean notification) { this.notification = notification; }
+    public int getNotification() { return notification; }
+    public void setNotification(int notification) { this.notification = notification; }
     public void setPosition(int position) { this.position = position; }
 
 

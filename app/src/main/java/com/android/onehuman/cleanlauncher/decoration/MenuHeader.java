@@ -1,16 +1,20 @@
-package com.android.onehuman.cleanlauncher.model;
+package com.android.onehuman.cleanlauncher.decoration;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.R;
+import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.SectionCallback;
 
 
@@ -22,8 +26,10 @@ public class MenuHeader extends RecyclerView.ItemDecoration {
 
     private View headerView;
     private TextView header;
+    private Context context;
 
-    public MenuHeader(int headerHeight, boolean sticky, @NonNull SectionCallback sectionCallback) {
+    public MenuHeader(Context c, int headerHeight, boolean sticky, @NonNull SectionCallback sectionCallback) {
+        this.context=c;
         headerOffset = headerHeight;
         this.sticky = sticky;
         this.sectionCallback = sectionCallback;
@@ -46,6 +52,7 @@ public class MenuHeader extends RecyclerView.ItemDecoration {
         if (headerView == null) {
             headerView = inflateHeaderView(parent);
             header = (TextView) headerView.findViewById(R.id.menu_header_label);
+
             fixLayoutSize(headerView, parent);
         }
 
@@ -97,4 +104,5 @@ public class MenuHeader extends RecyclerView.ItemDecoration {
 
         view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
     }
+
 }

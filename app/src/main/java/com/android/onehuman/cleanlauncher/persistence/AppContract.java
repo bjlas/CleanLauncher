@@ -14,6 +14,8 @@ public class AppContract {
         public static final String COLUMN_NAME = "name";
         public static final String COLUMN_PACKAGENAME = "packageName";
         public static final String COLUMN_POSITION = "position";
+        public static final String COLUMN_NOTIFICATION = "notification";
+
     }
 
 }

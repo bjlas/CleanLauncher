@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_section_header_height"
     android:background="#4d4d4d"
+    android:clickable="false"
     android:fontFamily="serif"
     android:text="header"
     android:textColor="#FAFAFA"

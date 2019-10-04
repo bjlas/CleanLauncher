@@ -6,9 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,7 +18,7 @@ import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
 import com.android.onehuman.cleanlauncher.events.Menu_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.SectionCallback;
 import com.android.onehuman.cleanlauncher.model.App;
-import com.android.onehuman.cleanlauncher.model.MenuHeader;
+import com.android.onehuman.cleanlauncher.decoration.MenuHeader;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,7 +32,7 @@ public class MenuActivity extends AppCompatActivity {
     private MenuAdapter menuAdapter;
     private RecyclerView menuRecyclerView;
     PackageManager packageManager;
-    Menu_OnItemClickListener menu_onItemClickListener;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +50,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
     }
+
 
     public class initAppsList extends AsyncTask<String, Void, String> {
 
@@ -80,7 +79,8 @@ public class MenuActivity extends AppCompatActivity {
         protected void onPostExecute(String result){
             menuAdapter = new MenuAdapter(activity, menuAppsList);
             menuRecyclerView.setAdapter(menuAdapter);
-            MenuHeader menuHeaderList = new MenuHeader(getResources().getDimensionPixelSize(R.dimen.recycler_section_header_height), true, getSectionCallback(menuAppsList));
+            MenuHeader menuHeaderList = new MenuHeader(activity, getResources().getDimensionPixelSize(R.dimen.recycler_section_header_height), true, getSectionCallback(menuAppsList));
+
             menuRecyclerView.addItemDecoration(menuHeaderList);
         }
 

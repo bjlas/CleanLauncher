@@ -24,7 +24,7 @@
             android:gravity="center_vertical"
             android:lines="1"
             android:text="text"
-            android:textColor="#4d4d4d"
+            android:textColor="@color/color_home_notification_off_text"
             android:textSize="14sp"
             app:fontFamily="serif" />
 
@@ -39,10 +39,11 @@
             android:id="@+id/home_item_notification"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/color_home_notification_on_background"
             android:clickable="false"
             android:gravity="center"
             android:text="@string/home_notification"
-            android:textColor="#4d4d4d"
+            android:textColor="@color/color_home_notification_on_text"
             android:textSize="14sp"
             android:visibility="invisible"
             app:fontFamily="serif" />
