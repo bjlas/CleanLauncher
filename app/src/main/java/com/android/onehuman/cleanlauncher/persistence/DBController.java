@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
 
 import java.util.ArrayList;
@@ -61,8 +62,8 @@ public class DBController {
         return db.delete(AppContract.AppEntry.TABLE_NAME, whereClause, args);
     }
 
-    public ArrayList<App> getAll() {
-        ArrayList<App> appList = new ArrayList<>();
+    public ArrayList<RowType> getAll() {
+        ArrayList<RowType> appList = new ArrayList<>();
         SQLiteDatabase baseDeDatos = dbHelper.getReadableDatabase();
         String[] columnasAConsultar = {AppContract.AppEntry.COLUMN_LABEL, AppContract.AppEntry.COLUMN_NAME, AppContract.AppEntry.COLUMN_PACKAGENAME, AppContract.AppEntry.COLUMN_POSITION,  AppContract.AppEntry.COLUMN_NOTIFICATION};
         String orderby = AppContract.AppEntry.COLUMN_POSITION + " ASC";

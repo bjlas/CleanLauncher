@@ -1,14 +1,9 @@
 package com.android.onehuman.cleanlauncher.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -17,41 +12,69 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.onehuman.cleanlauncher.R;
 import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
+import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
+import com.android.onehuman.cleanlauncher.viewHolders.AppViewHolder;
+import com.android.onehuman.cleanlauncher.viewHolders.NotificationViewHolder;
 
 
 import java.util.ArrayList;
 
-public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder> implements ItemTouchHelperAdapter {
+public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
+
+
 
     private Context context;
-    private ArrayList<App> appList;
+    private ArrayList<RowType> appList;
     private OnHomeClickListener onHomeClickListener;
     private ItemTouchHelper itemTouchHelper;
     private DBController dbController;
 
-    public HomeAdapter(Context context, ArrayList<App> al, OnHomeClickListener onHomeClickListener) {
+
+    public HomeAdapter(Context context, ArrayList<RowType> al, OnHomeClickListener onHomeClickListener) {
         this.context=context;
         this.appList = al;
         this.onHomeClickListener = onHomeClickListener;
         dbController = new DBController(context);
     }
 
-    public void updateAppList(ArrayList<App> al) {
+    public void updateAppList(ArrayList<RowType> al) {
         this.appList = al;
         notifyDataSetChanged();
     }
 
-    @NonNull
-    @Override
-    public HomeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
-        return new HomeViewHolder(view, onHomeClickListener);
+    public int getItemViewType(int position) {
+        return appList.get(position).getItemViewType();
     }
 
+
+
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull HomeViewHolder holder, int position) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        switch (viewType) {
+            case RowType.APP_TYPE:
+                View buttonTypeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
+                return new AppViewHolder(buttonTypeView, onHomeClickListener, itemTouchHelper);
+
+            case RowType.NOTIFICATION_TYPE:
+                View textTypeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item, parent, false);
+                return new NotificationViewHolder(textTypeView);
+
+
+            default:
+                return null;
+        }
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        appList.get(position).onBindViewHolder(holder);
+    }
+
+/*    public void showDetails(App chat){
 
         holder.label.setText(appList.get(position).getLabel());
 
@@ -67,7 +90,10 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
             holder.notification.setText("");
             holder.notification.setVisibility(View.INVISIBLE);
         }
-    }
+    }*/
+
+
+
 
     @Override
     public int getItemCount() {
@@ -78,8 +104,8 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
 
-        App app_origin = appList.get(fromPosition);
-        App app_dest = appList.get(toPosition);
+        App app_origin = (App )appList.get(fromPosition);
+        App app_dest = (App) appList.get(toPosition);
 
         app_origin.setPosition(toPosition);
         app_dest.setPosition(fromPosition);
@@ -95,9 +121,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
     @Override
     public void onItemSwiped(int position) {
-        dbController.delete(appList.get(position).getPackageName());
+        dbController.delete(((App)appList.get(position)).getPackageName());
         appList.remove(position);
-        dbController.updateAllPositions(appList);
+        //dbController.updateAllPositions(appList);
         notifyItemRemoved(position);
     }
 
@@ -107,66 +133,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeViewHolder
 
 
 
-    public class HomeViewHolder extends RecyclerView.ViewHolder implements
-            View.OnTouchListener,
-            GestureDetector.OnGestureListener
-    {
 
-        public TextView label;
-        public TextView notification;
-
-
-        OnHomeClickListener onHomeClickListener;
-        GestureDetector gestureDetector;
-
-        public HomeViewHolder(View itemView, OnHomeClickListener ocl) {
-            super(itemView);
-            label = itemView.findViewById(R.id.home_item_label);
-            notification = itemView.findViewById(R.id.home_item_notification);
-
-            onHomeClickListener = ocl;
-            gestureDetector = new GestureDetector(itemView.getContext(), this);
-            itemView.setOnTouchListener(this);
-        }
-
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            gestureDetector.onTouchEvent(event);
-            return true;
-        }
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            onHomeClickListener.onHomeClick(getAdapterPosition());
-            return true;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            return true;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent e) {
-            itemTouchHelper.startDrag(this);
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            return false;
-        }
-    }
 }
 
 

@@ -1,22 +1,11 @@
 package com.android.onehuman.cleanlauncher.model;
 
-import android.content.Intent;
-import android.net.Uri;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import androidx.recyclerview.widget.RecyclerView;
 
-import androidx.annotation.NonNull;
+import com.android.onehuman.cleanlauncher.interfaces.RowType;
+import com.android.onehuman.cleanlauncher.viewHolders.AppViewHolder;
 
-import com.android.onehuman.cleanlauncher.R;
-import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
-
-import java.io.Serializable;
-import java.util.UUID;
-
-public class App implements Comparable<App> {
+public class App implements RowType, Comparable<App> {
 
     private String label;
     private String name;
@@ -46,7 +35,6 @@ public class App implements Comparable<App> {
     public int getPosition() { return position; }
 
     public int getNotification() { return notification; }
-    public void setNotification(int notification) { this.notification = notification; }
     public void setPosition(int position) { this.position = position; }
 
 
@@ -57,4 +45,14 @@ public class App implements Comparable<App> {
                         .toString());
     }
 
+    @Override
+    public int getItemViewType() {
+        return RowType.APP_TYPE;
+    }
+
+    @Override
+    public void onBindViewHolder(RecyclerView.ViewHolder viewHolder) {
+        AppViewHolder textViewHolder = (AppViewHolder) viewHolder;
+        textViewHolder.label.setText(label);
+    }
 }
