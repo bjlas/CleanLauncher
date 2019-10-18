@@ -11,12 +11,12 @@ import com.android.onehuman.cleanlauncher.model.App;
 
 import java.util.List;
 
-public class Menu_OnItemClickListener implements AdapterView.OnClickListener {
+public class Menu_App_OnItemClickListener implements AdapterView.OnClickListener {
 
     private Context context;
     private App app;
 
-    public Menu_OnItemClickListener(Context c, App a) {
+    public Menu_App_OnItemClickListener(Context c, App a) {
         context = c;
         app=a;
     }

@@ -6,8 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -15,10 +13,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
-import com.android.onehuman.cleanlauncher.events.Menu_OnItemClickListener;
-import com.android.onehuman.cleanlauncher.interfaces.SectionCallback;
+import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
-import com.android.onehuman.cleanlauncher.decoration.MenuHeader;
+import com.android.onehuman.cleanlauncher.model.Header;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +25,7 @@ public class MenuActivity extends AppCompatActivity {
 
     static Activity activity;
 
-    private List<App> menuAppsList;
+    private List<RowType> menuAppsList;
     private MenuAdapter menuAdapter;
     private RecyclerView menuRecyclerView;
     PackageManager packageManager;
@@ -62,16 +59,29 @@ public class MenuActivity extends AppCompatActivity {
             Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
             menuAppsList = new ArrayList<>();
 
-            for(int I=0;I<pacsList.size();I++){
+            String previous="";
+            for(int index=0;index<pacsList.size();index++){
+                String label = pacsList.get(index).loadLabel(packageManager).toString();
+
+                if(index == 0 || isHeader(label, previous)) {
+                    previous=label.subSequence(0, 1).toString();
+                    menuAppsList.add(new Header(previous));
+                }
+
                 App app = new App(
-                        pacsList.get(I).loadLabel(packageManager).toString(),
-                        pacsList.get(I).activityInfo.name,
-                        pacsList.get(I).activityInfo.packageName
+                        label,
+                        pacsList.get(index).activityInfo.name,
+                        pacsList.get(index).activityInfo.packageName
                 );
                 menuAppsList.add(app);
             }
             return null;
         }
+
+        public boolean isHeader(String label, String previous) {
+            return label.charAt(0) != previous.charAt(0);
+        }
+
 
 
 
@@ -79,30 +89,9 @@ public class MenuActivity extends AppCompatActivity {
         protected void onPostExecute(String result){
             menuAdapter = new MenuAdapter(activity, menuAppsList);
             menuRecyclerView.setAdapter(menuAdapter);
-            MenuHeader menuHeaderList = new MenuHeader(activity, getResources().getDimensionPixelSize(R.dimen.recycler_section_header_height), true, getSectionCallback(menuAppsList));
-
-            menuRecyclerView.addItemDecoration(menuHeaderList);
         }
 
-        private SectionCallback getSectionCallback(final List<App> apps) {
-            return new SectionCallback() {
-                @Override
-                public boolean isSection(int position) {
-                    return position == 0 || apps.get(position)
-                            .getLabel()
-                            .charAt(0) != apps.get(position - 1)
-                            .getLabel()
-                            .charAt(0);
-                }
 
-                @Override
-                public CharSequence getSectionHeader(int position) {
-                    return apps.get(position)
-                            .getLabel()
-                            .subSequence(0, 1);
-                }
-            };
-        }
 
     }
 

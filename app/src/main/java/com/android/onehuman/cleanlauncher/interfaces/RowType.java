@@ -4,9 +4,8 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 public interface RowType {
-    int APP_TYPE = 0;
-    int NOTIFICATION_TYPE = 1;
-
-    int getItemViewType();
-    void onBindViewHolder(RecyclerView.ViewHolder viewHolder);
+    int HOME_APP = 0;
+    int HOME_NOTIFICATION = 1;
+    int MENU_APP = 2;
+    int MENU_HEADER = 3;
 }

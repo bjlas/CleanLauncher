@@ -4,17 +4,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.R;
-import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.SectionCallback;
 
 
@@ -83,7 +80,7 @@ public class MenuHeader extends RecyclerView.ItemDecoration {
 
     private View inflateHeaderView(RecyclerView parent) {
         return LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.menu_header, parent, false);
+                .inflate(R.layout.header_item, parent, false);
     }
 
 

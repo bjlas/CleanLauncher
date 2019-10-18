@@ -8,8 +8,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.Notification;
 
 import java.util.ArrayList;
+import android.util.Log;
 
 
 public class DBController {
@@ -62,6 +64,16 @@ public class DBController {
         return db.delete(AppContract.AppEntry.TABLE_NAME, whereClause, args);
     }
 
+
+    public int updateNotification(String packageName, int notification) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues valuesForUpdate = new ContentValues();
+        valuesForUpdate.put(AppContract.AppEntry.COLUMN_NOTIFICATION, notification);
+        String whereClause = AppContract.AppEntry.COLUMN_PACKAGENAME+" = ?";
+        String[] args = {String.valueOf(packageName)};
+        return db.update(AppContract.AppEntry.TABLE_NAME, valuesForUpdate, whereClause, args);
+    }
+
     public ArrayList<RowType> getAll() {
         ArrayList<RowType> appList = new ArrayList<>();
         SQLiteDatabase baseDeDatos = dbHelper.getReadableDatabase();
@@ -75,15 +87,20 @@ public class DBController {
         if (!cursor.moveToFirst()) return appList;
 
         do {
+            String label=cursor.getString(0);
+            String name=cursor.getString(1);
+            String packageName=cursor.getString(2);
+            int position=cursor.getInt(3);
+            int notification=cursor.getInt(4);
 
-            App app = new App(
-                    cursor.getString(0),
-                    cursor.getString(1),
-                    cursor.getString(2),
-                    cursor.getInt(3),
-                    cursor.getInt(4));
+            if(notification==0) {
+                App app = new App(label, name, packageName, position, notification);
+                appList.add(app);
+            } else {
+                Notification noti = new Notification(label, name, packageName, position, notification);
+                appList.add(noti);
+            }
 
-            appList.add(app);
         } while (cursor.moveToNext());
 
         cursor.close();

@@ -1,59 +1,65 @@
 package com.android.onehuman.cleanlauncher.service;
 
 import android.app.Notification;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
+import android.content.IntentFilter;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
-import android.text.TextUtils;
 import android.util.Log;
-
-import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 public class NotificationService extends NotificationListenerService {
 
-    Context context;
+    private NotificationMonitorReceiver receiver;
 
     @Override
     public void onCreate() {
         super.onCreate();
-        context = getApplicationContext();
+
+        receiver = new NotificationMonitorReceiver();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction("com.android.onehuman.cleanlauncher.NOTIFICATION_MONITOR");
+        registerReceiver(receiver,filter);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
 
     @Override
     public void onNotificationPosted(StatusBarNotification sbn) {
-
-        Log.v("NotificationService", sbn.toString());
-
-        //if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
-            Intent msgrcv = new Intent("NOTIFICATION_POSTED");
-
-
-
-            msgrcv.putExtra("package", sbn.getPackageName());
-            msgrcv.putExtra("title", sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TITLE).toString());
-        msgrcv.putExtra("date", "8 Octubre");
-            msgrcv.putExtra("posttime", sbn.getPostTime());
-        msgrcv.putExtra("text", sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString());
-
-
-
-
-
-
-
-            LocalBroadcastManager.getInstance(context).sendBroadcast(msgrcv);
-
+            Intent i = new Intent("com.android.onehuman.cleanlauncher.NOTIFICATION_MONITOR");
+            i.addCategory("NOTIFICATION_MONITOR.POSTED");
+            i.putExtra("packageName", sbn.getPackageName());
+            sendBroadcast(i);
     }
 
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
-        if ((sbn.getNotification().flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
-            Intent msgrcv = new Intent("NOTIFICATION_REMOVED");
-            msgrcv.putExtra("package", sbn.getPackageName());
-            LocalBroadcastManager.getInstance(context).sendBroadcast(msgrcv);
+            Intent i = new Intent("com.android.onehuman.cleanlauncher.NOTIFICATION_MONITOR");
+            i.addCategory("NOTIFICATION_MONITOR.REMOVED");
+            i.putExtra("packageName", sbn.getPackageName());
+            sendBroadcast(i);
+    }
+
+
+    class NotificationMonitorReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getCategories() == null) {
+                Intent i = new Intent("com.android.onehuman.cleanlauncher.NOTIFICATION_MONITOR");
+                i.addCategory(intent.getCategories().toString());
+                sendBroadcast(i);
+            }
         }
     }
+
+
+
+
+
 }

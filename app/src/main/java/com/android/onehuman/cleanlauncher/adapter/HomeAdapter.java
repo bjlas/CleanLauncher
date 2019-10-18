@@ -10,13 +10,15 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.R;
+import com.android.onehuman.cleanlauncher.events.Home_App_OnItemClickListener;
+import com.android.onehuman.cleanlauncher.events.Home_Notification_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
-import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.Notification;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
-import com.android.onehuman.cleanlauncher.viewHolders.AppViewHolder;
-import com.android.onehuman.cleanlauncher.viewHolders.NotificationViewHolder;
+import com.android.onehuman.cleanlauncher.viewHolders.HomeAppViewHolder;
+import com.android.onehuman.cleanlauncher.viewHolders.HomeNotificationViewHolder;
 
 
 import java.util.ArrayList;
@@ -27,15 +29,13 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
     private Context context;
     private ArrayList<RowType> appList;
-    private OnHomeClickListener onHomeClickListener;
     private ItemTouchHelper itemTouchHelper;
     private DBController dbController;
 
 
-    public HomeAdapter(Context context, ArrayList<RowType> al, OnHomeClickListener onHomeClickListener) {
+    public HomeAdapter(Context context, ArrayList<RowType> al) {
         this.context=context;
         this.appList = al;
-        this.onHomeClickListener = onHomeClickListener;
         dbController = new DBController(context);
     }
 
@@ -44,25 +44,31 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         notifyDataSetChanged();
     }
 
+    @Override
     public int getItemViewType(int position) {
-        return appList.get(position).getItemViewType();
-    }
 
+        if (appList.get(position) instanceof App) {
+            return RowType.HOME_APP;
+        }
+
+        if (appList.get(position) instanceof Notification) {
+            return RowType.HOME_NOTIFICATION;
+        }
+        return -1;
+    }
 
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         switch (viewType) {
-            case RowType.APP_TYPE:
-                View buttonTypeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
-                return new AppViewHolder(buttonTypeView, onHomeClickListener, itemTouchHelper);
+            case RowType.HOME_APP:
+                View appView = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_item, parent, false);
+                return new HomeAppViewHolder(appView, itemTouchHelper);
 
-            case RowType.NOTIFICATION_TYPE:
-                View textTypeView = LayoutInflater.from(parent.getContext()).inflate(R.layout.notification_item, parent, false);
-                return new NotificationViewHolder(textTypeView);
-
-
+            case RowType.HOME_NOTIFICATION:
+                View notificationView = LayoutInflater.from(parent.getContext()).inflate(R.layout.home_notification_item, parent, false);
+                return new HomeNotificationViewHolder(notificationView);
             default:
                 return null;
         }
@@ -70,30 +76,30 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
 
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        appList.get(position).onBindViewHolder(holder);
-    }
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
 
-/*    public void showDetails(App chat){
+        RowType object = appList.get(position);
+        if (object != null) {
+            switch (getItemViewType(position)) {
+                case RowType.HOME_APP:
+                    final App app = (App) object;
+                    HomeAppViewHolder appHolder = (HomeAppViewHolder) holder;
+                    appHolder.label.setText(app.getLabel());
 
-        holder.label.setText(appList.get(position).getLabel());
+                    appHolder.label.setOnClickListener(new Home_App_OnItemClickListener(context, app));
 
-        if (appList.get(position).getNotification() > 0) {
-            holder.label.setText(appList.get(position).getLabel());
-            holder.label.setTextColor(context.getResources().getColor(R.color.color_home_notification_on_text));
-            holder.label.setBackgroundColor(context.getResources().getColor(R.color.color_home_notification_on_background));
-            holder.notification.setText("("+appList.get(position).getNotification()+")");
-            holder.notification.setVisibility(View.VISIBLE);
-        } else {
-            holder.label.setTextColor(context.getResources().getColor(R.color.color_home_notification_off_text));
-            holder.label.setBackgroundColor(Color.TRANSPARENT);
-            holder.notification.setText("");
-            holder.notification.setVisibility(View.INVISIBLE);
+
+                    break;
+                case RowType.HOME_NOTIFICATION:
+                    final Notification notification = (Notification) object;
+                    HomeNotificationViewHolder notificationViewHolder = (HomeNotificationViewHolder) holder;
+                    notificationViewHolder.label.setText(notification.getLabel());
+                    notificationViewHolder.label.setOnClickListener(new Home_Notification_OnItemClickListener(context, notification));
+
+                    break;
+            }
         }
-    }*/
-
-
-
+    }
 
     @Override
     public int getItemCount() {
@@ -104,27 +110,32 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     @Override
     public void onItemMove(int fromPosition, int toPosition) {
 
-        App app_origin = (App )appList.get(fromPosition);
-        App app_dest = (App) appList.get(toPosition);
+        if(getItemViewType(fromPosition) == RowType.HOME_APP & getItemViewType(toPosition) == RowType.HOME_APP) {
+            App app_origin = (App)appList.get(fromPosition);
+            App app_dest = (App) appList.get(toPosition);
 
-        app_origin.setPosition(toPosition);
-        app_dest.setPosition(fromPosition);
+            app_origin.setPosition(toPosition);
+            app_dest.setPosition(fromPosition);
 
-        dbController.updatePosition(app_origin, toPosition);
-        dbController.updatePosition(app_dest, fromPosition);
+            dbController.updatePosition(app_origin, toPosition);
+            dbController.updatePosition(app_dest, fromPosition);
 
-        appList.remove(app_origin);
-        appList.add(toPosition, app_origin);
+            appList.remove(app_origin);
+            appList.add(toPosition, appList.get(fromPosition));
 
-        notifyItemMoved(fromPosition, toPosition);
+            notifyItemMoved(fromPosition, toPosition);
+        }
+
     }
 
     @Override
     public void onItemSwiped(int position) {
-        dbController.delete(((App)appList.get(position)).getPackageName());
-        appList.remove(position);
-        //dbController.updateAllPositions(appList);
-        notifyItemRemoved(position);
+        if(getItemViewType(position) == RowType.HOME_APP) {
+            dbController.delete(((App) appList.get(position)).getPackageName());
+            appList.remove(position);
+            //dbController.updateAllPositions(appList);
+            notifyItemRemoved(position);
+        }
     }
 
     public void setTouchHelper(ItemTouchHelper touchHelper){

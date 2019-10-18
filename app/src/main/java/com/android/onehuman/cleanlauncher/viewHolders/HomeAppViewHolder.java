@@ -9,26 +9,19 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.R;
-import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
-import com.android.onehuman.cleanlauncher.model.App;
 
-public class AppViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener, GestureDetector.OnGestureListener
+public class HomeAppViewHolder extends RecyclerView.ViewHolder implements View.OnTouchListener, GestureDetector.OnGestureListener
 {
 
         public TextView label;
-        public TextView notification;
 
-
-        OnHomeClickListener onHomeClickListener;
         GestureDetector gestureDetector;
         private ItemTouchHelper itemTouchHelper;
 
-        public AppViewHolder(View itemView, OnHomeClickListener ocl, ItemTouchHelper ith) {
+        public HomeAppViewHolder(View itemView, ItemTouchHelper ith) {
             super(itemView);
             label = itemView.findViewById(R.id.home_item_label);
-            notification = itemView.findViewById(R.id.home_item_notification);
             itemTouchHelper=ith;
-            onHomeClickListener = ocl;
             gestureDetector = new GestureDetector(itemView.getContext(), this);
             itemView.setOnTouchListener(this);
         }
@@ -52,7 +45,6 @@ public class AppViewHolder extends RecyclerView.ViewHolder implements View.OnTou
 
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
-            onHomeClickListener.onHomeClick(getAdapterPosition());
             return true;
         }
 
