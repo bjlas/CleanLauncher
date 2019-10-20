@@ -103,7 +103,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
                     Header header = (Header) object;
                     HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
                     headerHolder.label.setText(header.getLabel());
-                    headerHolder.label.setOnClickListener(new Menu_Header_OnItemClickListener(context));
+                    headerHolder.label.setOnClickListener(new Menu_Header_OnItemClickListener(context,appList));
                     break;
             }
         }

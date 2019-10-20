@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/CleanLauncherTheme">
         <activity
-            android:name=".AlphabeticalMenu"
+            android:name=".AlphabeticalMenuActivity"
             android:label="@string/title_activity_alphabetical_menu"
             android:theme="@style/CleanLauncherTheme.NoActionBar"></activity>
         <activity android:name=".HomeActivity">

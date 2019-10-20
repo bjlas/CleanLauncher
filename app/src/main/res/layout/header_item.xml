@@ -4,6 +4,7 @@
     style="?android:attr/listSeparatorTextViewStyle"
     android:layout_width="match_parent"
     android:layout_height="@dimen/recycler_section_header_height"
+    android:layout_margin="5dp"
     android:background="#4d4d4d"
     android:clickable="false"
     android:fontFamily="serif"

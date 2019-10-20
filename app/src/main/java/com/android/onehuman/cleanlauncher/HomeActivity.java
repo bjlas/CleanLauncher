@@ -49,7 +49,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(getPackageName())) {
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    startActivity(intent);
+//                    startActivity(intent);
                 }
 
                 nReceiver = new NotificationReceiver();
@@ -115,6 +115,8 @@ public class HomeActivity extends AppCompatActivity {
                 Intent menuIntent = new Intent(this, MenuActivity.class);
                 startActivity(menuIntent);
             }
+
+
 
 
 

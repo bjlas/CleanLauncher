@@ -1,5 +1,7 @@
 package com.android.onehuman.cleanlauncher.interfaces;
 
+import android.os.Parcelable;
+
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 

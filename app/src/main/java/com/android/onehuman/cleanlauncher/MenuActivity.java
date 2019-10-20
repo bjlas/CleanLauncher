@@ -6,9 +6,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 
@@ -20,6 +23,8 @@ import com.android.onehuman.cleanlauncher.model.Header;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import static com.android.onehuman.cleanlauncher.utils.Utils.isHeader;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -46,6 +51,28 @@ public class MenuActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            String selectedHeader = data.getStringExtra("selectedHeader");
+            menuRecyclerView.scrollToPosition(findPosition(selectedHeader));
+        }
+    }
+
+    public int findPosition(String headerLabel) {
+        int index=0;
+        for(index=0; index<menuAppsList.size(); index++) {
+            if(menuAppsList.get(index) instanceof Header) {
+                if (((Header) menuAppsList.get(index)).getLabel().equals(headerLabel)) {
+                    return index;
+                }
+            }
+        }
+        return index;
     }
 
 
@@ -78,18 +105,21 @@ public class MenuActivity extends AppCompatActivity {
             return null;
         }
 
-        public boolean isHeader(String label, String previous) {
-            return label.charAt(0) != previous.charAt(0);
-        }
-
-
-
-
         @Override
         protected void onPostExecute(String result){
             menuAdapter = new MenuAdapter(activity, menuAppsList);
             menuRecyclerView.setAdapter(menuAdapter);
+
+            //String selectedHeader = getIntent().getStringExtra("selectedHeader");
+            //if(selectedHeader!=null) {
+                //menuRecyclerView.scrollToPosition(findPosition(selectedHeader));
+
+ //           }
         }
+
+
+
+
 
 
 
