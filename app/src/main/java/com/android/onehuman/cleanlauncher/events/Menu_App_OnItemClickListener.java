@@ -7,16 +7,14 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.onehuman.cleanlauncher.HomeActivity;
-import com.android.onehuman.cleanlauncher.model.App;
-
-import java.util.List;
+import com.android.onehuman.cleanlauncher.model.LauncherApp;
 
 public class Menu_App_OnItemClickListener implements AdapterView.OnClickListener {
 
     private Context context;
-    private App app;
+    private LauncherApp app;
 
-    public Menu_App_OnItemClickListener(Context c, App a) {
+    public Menu_App_OnItemClickListener(Context c, LauncherApp a) {
         context = c;
         app=a;
     }

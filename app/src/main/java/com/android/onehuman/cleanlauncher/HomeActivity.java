@@ -20,7 +20,8 @@ import com.android.onehuman.cleanlauncher.adapter.HomeAdapter;
 import com.android.onehuman.cleanlauncher.events.HomeItemTouchHelper;
 import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.LauncherApp;
+import com.android.onehuman.cleanlauncher.model.Notification;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
 
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class HomeActivity extends AppCompatActivity implements OnHomeClickListen
 
                 if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(getPackageName())) {
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-                    //startActivity(intent);
+                    startActivity(intent);
                 }
 
                 nReceiver = new NotificationReceiver();
@@ -91,13 +92,13 @@ public class HomeActivity extends AppCompatActivity implements OnHomeClickListen
             }
 
             public void loadAppsList()  {
-                homeAppsList = dbController.getAll();
+                homeAppsList = dbController.getAllApps();
 
                 for (RowType app : homeAppsList) {
-                    if (app instanceof App) {
-                        String pn = ((App) app).getPackageName();
+                    if (app instanceof LauncherApp) {
+                        String pn = ((LauncherApp) app).getPackageName();
                         if (!isPackageInstalled(pn)) {
-                            dbController.delete(pn);
+                            dbController.deleteApp(pn);
                             homeAppsList.remove(app);
                         }
                     }
@@ -120,7 +121,7 @@ public class HomeActivity extends AppCompatActivity implements OnHomeClickListen
 
     @Override
     public void onHomeClick(int position) {
-        App apptoLaunch = (App) homeAppsList.get(position);
+        LauncherApp apptoLaunch = (LauncherApp) homeAppsList.get(position);
         if (HomeActivity.appLaunchable){
             Intent launchIntent = new Intent(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -139,8 +140,8 @@ public class HomeActivity extends AppCompatActivity implements OnHomeClickListen
             if (intent.hasCategory("NOTIFICATION_MONITOR.POSTED")) {
                 if (intent.hasExtra("packageName")) {
                     String packageName = intent.getStringExtra("packageName");
-                    int result = dbController.updateNotification(packageName,1);
-                    homeAppsList = dbController.getAll();
+                    dbController.insertNotification(packageName,1);
+                    homeAppsList = dbController.getAllApps();
                     homeAdapter.updateAppList(homeAppsList);
                 }
             }
@@ -148,7 +149,7 @@ public class HomeActivity extends AppCompatActivity implements OnHomeClickListen
             if (intent.hasCategory("NOTIFICATION_MONITOR.REMOVED")) {
                 if (intent.hasExtra("packageName")) {
                     String packageName = intent.getStringExtra("packageName");
-                    dbController.updateNotification(packageName,0);
+                    dbController.deleteNotification(packageName);
                 }
             }
         }

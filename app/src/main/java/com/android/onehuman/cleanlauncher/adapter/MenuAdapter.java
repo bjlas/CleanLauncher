@@ -15,8 +15,9 @@ import com.android.onehuman.cleanlauncher.R;
 import com.android.onehuman.cleanlauncher.events.Menu_App_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.events.Menu_Header_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.LauncherApp;
 import com.android.onehuman.cleanlauncher.model.Header;
+import com.android.onehuman.cleanlauncher.model.Notification;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
 import com.android.onehuman.cleanlauncher.viewHolders.MenuAppViewHolder;
 import com.android.onehuman.cleanlauncher.viewHolders.HeaderViewHolder;
@@ -42,10 +43,12 @@ public class MenuAdapter extends RecyclerView.Adapter {
             case RowType.MENU_APP:
                 View appView = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_item, parent, false);
                 return new MenuAppViewHolder(appView);
-
             case RowType.MENU_HEADER:
-                View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item, parent, false);
+                View headerView = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_header_item, parent, false);
                 return new HeaderViewHolder(headerView);
+            case RowType.MENU_NOTIFICATION:
+                View notificationView = LayoutInflater.from(parent.getContext()).inflate(R.layout.menu_notification_item, parent, false);
+                return new MenuAppViewHolder(notificationView);
             default:
                 return null;
         }
@@ -54,12 +57,16 @@ public class MenuAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
 
-        if (appList.get(position) instanceof App) {
+        if (appList.get(position) instanceof LauncherApp) {
             return RowType.MENU_APP;
         }
 
         if (appList.get(position) instanceof Header) {
             return RowType.MENU_HEADER;
+        }
+
+        if (appList.get(position) instanceof Notification) {
+            return RowType.MENU_NOTIFICATION;
         }
         return -1;
     }
@@ -71,7 +78,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
         if (object != null) {
             switch (getItemViewType(position)) {
                 case RowType.MENU_APP:
-                    final App app = (App) object;
+                    final LauncherApp app = (LauncherApp) object;
                     MenuAppViewHolder appHolder = (MenuAppViewHolder) holder;
                     appHolder.label.setText(app.getLabel());
                     appHolder.label.setOnClickListener(new Menu_App_OnItemClickListener(context, app));
@@ -80,7 +87,7 @@ public class MenuAdapter extends RecyclerView.Adapter {
                         @Override
                         public void onClick(View v) {
 
-                            if(dbController.insert(app.getLabel(), app.getName(), app.getPackageName())){
+                            if(dbController.insertApp(app.getLabel(), app.getName(), app.getPackageName())){
                                 Toast.makeText(context, context.getString(R.string.app_added_to_home)+app.getLabel(), Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context, context.getString(R.string.app_already_exist_at_home)+app.getLabel(), Toast.LENGTH_SHORT).show();
@@ -99,11 +106,18 @@ public class MenuAdapter extends RecyclerView.Adapter {
                     });
 
                     break;
+
                 case RowType.MENU_HEADER:
                     Header header = (Header) object;
                     HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
                     headerHolder.label.setText(header.getLabel());
                     headerHolder.label.setOnClickListener(new Menu_Header_OnItemClickListener(context,appList));
+                    break;
+
+                case RowType.MENU_NOTIFICATION:
+                    Notification notification = (Notification) object;
+                    MenuAppViewHolder notificationHolder = (MenuAppViewHolder) holder;
+                    notificationHolder.label.setText(notification.getLabel());
                     break;
             }
         }

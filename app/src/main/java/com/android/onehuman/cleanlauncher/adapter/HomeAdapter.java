@@ -1,6 +1,5 @@
 package com.android.onehuman.cleanlauncher.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +9,12 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.onehuman.cleanlauncher.HomeActivity;
 import com.android.onehuman.cleanlauncher.R;
-import com.android.onehuman.cleanlauncher.events.Home_App_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.events.Home_Notification_OnItemClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.ItemTouchHelperAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.App;
+import com.android.onehuman.cleanlauncher.model.LauncherApp;
 import com.android.onehuman.cleanlauncher.model.Notification;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
 import com.android.onehuman.cleanlauncher.viewHolders.HomeAppViewHolder;
@@ -55,7 +52,7 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     @Override
     public int getItemViewType(int position) {
 
-        if (appList.get(position) instanceof App) {
+        if (appList.get(position) instanceof LauncherApp) {
             return RowType.HOME_APP;
         }
 
@@ -90,7 +87,7 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
         if (object != null) {
             switch (getItemViewType(position)) {
                 case RowType.HOME_APP:
-                    final App app = (App) object;
+                    final LauncherApp app = (LauncherApp) object;
                     HomeAppViewHolder appHolder = (HomeAppViewHolder) holder;
                     appHolder.label.setText(app.getLabel());
 
@@ -101,7 +98,7 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
                 case RowType.HOME_NOTIFICATION:
                     final Notification notification = (Notification) object;
                     HomeNotificationViewHolder notificationViewHolder = (HomeNotificationViewHolder) holder;
-                    notificationViewHolder.label.setText(notification.getLabel());
+                    notificationViewHolder.label.setText("NOTIFICIACION TEST");
                     notificationViewHolder.label.setOnClickListener(new Home_Notification_OnItemClickListener(context, notification));
 
                     break;
@@ -119,14 +116,14 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     public void onItemMove(int fromPosition, int toPosition) {
 
         if(getItemViewType(fromPosition) == RowType.HOME_APP & getItemViewType(toPosition) == RowType.HOME_APP) {
-            App app_origin = (App)appList.get(fromPosition);
-            App app_dest = (App) appList.get(toPosition);
+            LauncherApp app_origin = (LauncherApp)appList.get(fromPosition);
+            LauncherApp app_dest = (LauncherApp) appList.get(toPosition);
 
             app_origin.setPosition(toPosition);
             app_dest.setPosition(fromPosition);
 
-            dbController.updatePosition(app_origin, toPosition);
-            dbController.updatePosition(app_dest, fromPosition);
+            dbController.updateApp(app_origin);
+            dbController.updateApp(app_dest);
 
             appList.remove(app_origin);
             appList.add(toPosition, app_dest);
@@ -139,9 +136,14 @@ public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelper
     @Override
     public void onItemSwiped(int position) {
         if(getItemViewType(position) == RowType.HOME_APP) {
-            dbController.delete(((App) appList.get(position)).getPackageName());
+            dbController.deleteApp(((LauncherApp) appList.get(position)).getPackageName());
             appList.remove(position);
-            dbController.updateAllPositions(appList);
+
+            for (int index=0; index < appList.size(); index++) {
+                LauncherApp app = (LauncherApp)appList.get(index);
+                app.setPosition(index);
+                dbController.updateApp(app);
+            }
             notifyItemRemoved(position);
         }
     }

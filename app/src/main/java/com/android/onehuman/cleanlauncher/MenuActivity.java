@@ -6,26 +6,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.App;
 import com.android.onehuman.cleanlauncher.model.Header;
+import com.android.onehuman.cleanlauncher.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.android.onehuman.cleanlauncher.utils.Utils.generateMenuList;
-import static com.android.onehuman.cleanlauncher.utils.Utils.isHeader;
 
 public class MenuActivity extends AppCompatActivity {
 
@@ -37,12 +32,14 @@ public class MenuActivity extends AppCompatActivity {
     PackageManager packageManager;
     private String selectHeader;
     private LinearLayoutManager linearLayoutManager;
+    private Utils utils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
         activity=this;
+        utils = new Utils(activity);
         packageManager =getPackageManager();
         menuRecyclerView = (RecyclerView) findViewById(R.id.menu_listview);
         linearLayoutManager=new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -88,7 +85,7 @@ public class MenuActivity extends AppCompatActivity {
             List<ResolveInfo> pacsList = packageManager.queryIntentActivities(mainIntent, 0);
             Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
             menuAppsList = new ArrayList<>();
-            menuAppsList = generateMenuList(pacsList, packageManager);
+            menuAppsList = utils.generateMenuList(pacsList, packageManager);
             return null;
         }
 

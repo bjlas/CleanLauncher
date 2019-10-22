@@ -8,29 +8,17 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import com.android.onehuman.cleanlauncher.adapter.AlphabeticalAdapter;
-import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
-import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.App;
 import com.android.onehuman.cleanlauncher.model.Header;
 import com.android.onehuman.cleanlauncher.utils.Utils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.android.onehuman.cleanlauncher.utils.Utils.generateAlphabeticalList;
-import static com.android.onehuman.cleanlauncher.utils.Utils.generateMenuList;
-import static com.android.onehuman.cleanlauncher.utils.Utils.isHeader;
 
 public class AlphabeticalMenuActivity extends AppCompatActivity {
 
@@ -38,6 +26,7 @@ public class AlphabeticalMenuActivity extends AppCompatActivity {
     private PackageManager packageManager;
     private List<Header> alphabeticalList;
     private AlphabeticalAdapter alphabeticalAdapter;
+    private Utils utils;
     static Activity activity;
 
     @Override
@@ -45,6 +34,7 @@ public class AlphabeticalMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.alphabetical_menu_activity);
         activity=this;
+        utils=new Utils(activity);
         packageManager =getPackageManager();
 
         alphabeticalRecyclerView = (RecyclerView) findViewById(R.id.alphabetical_listview);
@@ -68,7 +58,7 @@ public class AlphabeticalMenuActivity extends AppCompatActivity {
             List<ResolveInfo> pacsList = packageManager.queryIntentActivities(mainIntent, 0);
             Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
             alphabeticalList = new ArrayList<Header>();
-            alphabeticalList = generateAlphabeticalList(pacsList, packageManager);
+            alphabeticalList = utils.generateAlphabeticalList(pacsList, packageManager);
             return null;
         }
 
