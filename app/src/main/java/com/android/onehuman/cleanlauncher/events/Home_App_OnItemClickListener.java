@@ -7,9 +7,10 @@ import android.view.View;
 import android.widget.AdapterView;
 
 import com.android.onehuman.cleanlauncher.HomeActivity;
+import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.model.App;
 
-public class Home_App_OnItemClickListener implements AdapterView.OnClickListener {
+public class Home_App_OnItemClickListener implements OnHomeClickListener {
 
     private Context context;
     private App app;
@@ -20,8 +21,7 @@ public class Home_App_OnItemClickListener implements AdapterView.OnClickListener
     }
 
     @Override
-    public void onClick(View view) {
-
+    public void onHomeClick(int position) {
         if (HomeActivity.appLaunchable){
             Intent launchIntent = new Intent(Intent.ACTION_MAIN);
             launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -30,7 +30,6 @@ public class Home_App_OnItemClickListener implements AdapterView.OnClickListener
 
             context.startActivity(launchIntent);
         }
-
     }
 
 }

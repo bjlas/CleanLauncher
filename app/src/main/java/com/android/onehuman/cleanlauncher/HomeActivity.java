@@ -2,6 +2,7 @@ package com.android.onehuman.cleanlauncher;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -17,13 +18,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.onehuman.cleanlauncher.adapter.HomeAdapter;
 import com.android.onehuman.cleanlauncher.events.HomeItemTouchHelper;
+import com.android.onehuman.cleanlauncher.interfaces.OnHomeClickListener;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.App;
 import com.android.onehuman.cleanlauncher.persistence.DBController;
 
 import java.util.ArrayList;
 
-public class HomeActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity implements OnHomeClickListener {
 
     public static boolean appLaunchable = true;
     private RecyclerView homeRecyclerView;
@@ -49,7 +51,7 @@ public class HomeActivity extends AppCompatActivity {
 
                 if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(getPackageName())) {
                     Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
-//                    startActivity(intent);
+                    //startActivity(intent);
                 }
 
                 nReceiver = new NotificationReceiver();
@@ -75,7 +77,7 @@ public class HomeActivity extends AppCompatActivity {
                 loadAppsList();
 
                 if(homeAdapter == null) {
-                    homeAdapter = new HomeAdapter(activity, homeAppsList);
+                    homeAdapter = new HomeAdapter(activity, homeAppsList, this);
                     ItemTouchHelper.Callback callback = new HomeItemTouchHelper(homeAdapter);
                     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
                     homeAdapter.setTouchHelper(itemTouchHelper);
@@ -116,8 +118,18 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(menuIntent);
             }
 
+    @Override
+    public void onHomeClick(int position) {
+        App apptoLaunch = (App) homeAppsList.get(position);
+        if (HomeActivity.appLaunchable){
+            Intent launchIntent = new Intent(Intent.ACTION_MAIN);
+            launchIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+            ComponentName cp = new ComponentName(apptoLaunch.getPackageName(), apptoLaunch.getName());
+            launchIntent.setComponent(cp);
 
-
+            activity.startActivity(launchIntent);
+        }
+    }
 
 
     public class NotificationReceiver extends BroadcastReceiver{
@@ -127,7 +139,9 @@ public class HomeActivity extends AppCompatActivity {
             if (intent.hasCategory("NOTIFICATION_MONITOR.POSTED")) {
                 if (intent.hasExtra("packageName")) {
                     String packageName = intent.getStringExtra("packageName");
-                    dbController.updateNotification(packageName,1);
+                    int result = dbController.updateNotification(packageName,1);
+                    homeAppsList = dbController.getAll();
+                    homeAdapter.updateAppList(homeAppsList);
                 }
             }
 

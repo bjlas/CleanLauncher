@@ -119,34 +119,11 @@ public class DBController {
         return db.update(AppContract.AppEntry.TABLE_NAME, valuesForUpdate, whereClause, args);
     }
 
-    public void increaseNotificationValue(String packageName) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        String query = "UPDATE "+ AppContract.AppEntry.TABLE_NAME +
-                " SET "+AppContract.AppEntry.COLUMN_NOTIFICATION+" = "+AppContract.AppEntry.COLUMN_NOTIFICATION+"+1 " +
-                "WHERE "+AppContract.AppEntry.COLUMN_PACKAGENAME+" = \""+packageName+"\"";
-
-        db.execSQL(query);
-        db.close();
-
-    }
-
-    public void clearNotifications(String packageName) {
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-        String query = "UPDATE "+ AppContract.AppEntry.TABLE_NAME +
-                " SET "+AppContract.AppEntry.COLUMN_NOTIFICATION+" = 0 " +
-                "WHERE "+AppContract.AppEntry.COLUMN_PACKAGENAME+" = \""+packageName+"\"";
-
-        db.execSQL(query);
-        db.close();
-    }
-
-
-    public void updateAllPositions(ArrayList<App> appList) {
+    public void updateAllPositions(ArrayList<RowType> appList) {
 
         for (int index=0; index < appList.size(); index++) {
-            updatePosition(appList.get(index), index);
+            updatePosition((App)appList.get(index), index);
         }
     }
 

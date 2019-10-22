@@ -18,6 +18,7 @@ import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,13 +28,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.android.onehuman.cleanlauncher.utils.Utils.generateAlphabeticalList;
+import static com.android.onehuman.cleanlauncher.utils.Utils.generateMenuList;
 import static com.android.onehuman.cleanlauncher.utils.Utils.isHeader;
 
 public class AlphabeticalMenuActivity extends AppCompatActivity {
 
     private RecyclerView alphabeticalRecyclerView;
     private PackageManager packageManager;
-    private ArrayList<Header> alphabeticalList;
+    private List<Header> alphabeticalList;
     private AlphabeticalAdapter alphabeticalAdapter;
     static Activity activity;
 
@@ -45,7 +48,7 @@ public class AlphabeticalMenuActivity extends AppCompatActivity {
         packageManager =getPackageManager();
 
         alphabeticalRecyclerView = (RecyclerView) findViewById(R.id.alphabetical_listview);
-        alphabeticalRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        alphabeticalRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         new initAppsList().execute();
 
     }
@@ -65,17 +68,7 @@ public class AlphabeticalMenuActivity extends AppCompatActivity {
             List<ResolveInfo> pacsList = packageManager.queryIntentActivities(mainIntent, 0);
             Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
             alphabeticalList = new ArrayList<Header>();
-
-            String previous="";
-            for(int index=0;index<pacsList.size();index++){
-                String label = pacsList.get(index).loadLabel(packageManager).toString();
-
-                if(index == 0 || isHeader(label, previous)) {
-                    previous=label.subSequence(0, 1).toString();
-                    alphabeticalList.add(new Header(previous));
-                }
-
-            }
+            alphabeticalList = generateAlphabeticalList(pacsList, packageManager);
             return null;
         }
 

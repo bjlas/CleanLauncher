@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static com.android.onehuman.cleanlauncher.utils.Utils.generateMenuList;
 import static com.android.onehuman.cleanlauncher.utils.Utils.isHeader;
 
 public class MenuActivity extends AppCompatActivity {
@@ -34,7 +35,8 @@ public class MenuActivity extends AppCompatActivity {
     private MenuAdapter menuAdapter;
     private RecyclerView menuRecyclerView;
     PackageManager packageManager;
-
+    private String selectHeader;
+    private LinearLayoutManager linearLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,8 @@ public class MenuActivity extends AppCompatActivity {
         activity=this;
         packageManager =getPackageManager();
         menuRecyclerView = (RecyclerView) findViewById(R.id.menu_listview);
-        menuRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        linearLayoutManager=new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        menuRecyclerView.setLayoutManager(linearLayoutManager);
         new initAppsList().execute();
 
     }
@@ -58,8 +61,8 @@ public class MenuActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            String selectedHeader = data.getStringExtra("selectedHeader");
-            menuRecyclerView.scrollToPosition(findPosition(selectedHeader));
+            selectHeader = data.getStringExtra("selectedHeader");
+            linearLayoutManager.scrollToPositionWithOffset(findPosition(selectHeader),0);
         }
     }
 
@@ -85,23 +88,7 @@ public class MenuActivity extends AppCompatActivity {
             List<ResolveInfo> pacsList = packageManager.queryIntentActivities(mainIntent, 0);
             Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
             menuAppsList = new ArrayList<>();
-
-            String previous="";
-            for(int index=0;index<pacsList.size();index++){
-                String label = pacsList.get(index).loadLabel(packageManager).toString();
-
-                if(index == 0 || isHeader(label, previous)) {
-                    previous=label.subSequence(0, 1).toString();
-                    menuAppsList.add(new Header(previous));
-                }
-
-                App app = new App(
-                        label,
-                        pacsList.get(index).activityInfo.name,
-                        pacsList.get(index).activityInfo.packageName
-                );
-                menuAppsList.add(app);
-            }
+            menuAppsList = generateMenuList(pacsList, packageManager);
             return null;
         }
 
@@ -110,18 +97,7 @@ public class MenuActivity extends AppCompatActivity {
             menuAdapter = new MenuAdapter(activity, menuAppsList);
             menuRecyclerView.setAdapter(menuAdapter);
 
-            //String selectedHeader = getIntent().getStringExtra("selectedHeader");
-            //if(selectedHeader!=null) {
-                //menuRecyclerView.scrollToPosition(findPosition(selectedHeader));
-
- //           }
         }
-
-
-
-
-
-
 
     }
 

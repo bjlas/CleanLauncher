@@ -38,7 +38,7 @@ public class AlphabeticalAdapter extends RecyclerView.Adapter<HeaderViewHolder> 
     @NonNull
     @Override
     public HeaderViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.header_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.alphabetical_header_item, parent, false);
         return new HeaderViewHolder(view);
     }
 
