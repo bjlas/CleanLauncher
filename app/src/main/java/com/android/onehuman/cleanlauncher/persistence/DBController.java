@@ -7,7 +7,9 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
-import com.android.onehuman.cleanlauncher.model.LauncherApp;
+import com.android.onehuman.cleanlauncher.model.Header;
+import com.android.onehuman.cleanlauncher.model.MenuApp;
+import com.android.onehuman.cleanlauncher.model.HomeApp;
 import com.android.onehuman.cleanlauncher.model.Notification;
 
 import java.util.ArrayList;
@@ -22,74 +24,43 @@ public class DBController {
         dbHelper = DBHelper.getInstance(context);
     }
 
-
-    public boolean insertApp(String label, String name, String packagename) {
-
-        boolean result=false;
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String[] columns = {DBContract.AppEntry.COLUMN_PACKAGENAME};
-        String whereClause = DBContract.AppEntry.COLUMN_PACKAGENAME+" = ?";
-        String[] args = {packagename};
-
-        Cursor cursor = db.query(DBContract.AppEntry.TABLE_NAME, columns, whereClause, args, null, null, null);
-
-        if(cursor.getCount()>0){
-            //already exists in DB
-            result=false;
-        }else{
-            //No exists in DB
-            ContentValues values = new ContentValues();
-            values.put(DBContract.AppEntry.COLUMN_LABEL, label);
-            values.put(DBContract.AppEntry.COLUMN_NAME, name);
-            values.put(DBContract.AppEntry.COLUMN_PACKAGENAME, packagename);
-            values.put(DBContract.AppEntry.COLUMN_POSITION, getAppTableSize()+1);
-            db.insertWithOnConflict(DBContract.AppEntry.TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
-            result = true;
-        }
-
-        cursor.close();
-        return result;
-    }
-    public long getAppTableSize() {
-        SQLiteDatabase db = dbHelper.getReadableDatabase();
-        long count = DatabaseUtils.queryNumEntries(db, DBContract.AppEntry.TABLE_NAME);
-        return count;
-    }
-
-
-    public boolean checkNotifications(String packageName) {
-
-        boolean result=false;
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        String[] columns = {DBContract.NotificationEntry.COLUMN_NOTIFICATION};
-        String whereClause = DBContract.NotificationEntry.COLUMN_PACKAGENAME+" = ?";
-        String[] args = {packageName};
-
-        Cursor cursor = db.query(DBContract.NotificationEntry.TABLE_NAME, columns, whereClause, args, null, null, null);
-
-        if(cursor.getCount()>0){
-            result=true;
-        }
-
-        cursor.close();
-        return result;
-    }
-
-    public ArrayList<RowType> getAllApps() {
+    //COMMON
+    public ArrayList<RowType> getHomeApps() {
 
         ArrayList<RowType> appList = new ArrayList<>();
 
-        String selectQuery = "SELECT " +
-                "app."+DBContract.AppEntry.COLUMN_LABEL+", " +
-                "app."+DBContract.AppEntry.COLUMN_NAME+", " +
-                "app."+DBContract.AppEntry.COLUMN_PACKAGENAME+", " +
-                "app."+DBContract.AppEntry.COLUMN_POSITION+", " +
+        String launcherNotificationsSQL ="SELECT " +
+                "launcher."+DBContract.HomeAppEntry.COLUMN_PACKAGENAME+"," +
                 "noti."+DBContract.NotificationEntry.COLUMN_NOTIFICATION+" " +
                 "FROM " +
-                ""+DBContract.AppEntry.TABLE_NAME+" app LEFT JOIN "+DBContract.NotificationEntry.TABLE_NAME+" noti " +
+                ""+DBContract.HomeAppEntry.TABLE_NAME+" launcher " +
+                "LEFT JOIN " +
+                ""+DBContract.NotificationEntry.TABLE_NAME+" noti " +
                 "ON " +
-                "app."+DBContract.AppEntry.COLUMN_PACKAGENAME+"=noti."+DBContract.AppEntry.COLUMN_PACKAGENAME+"" +
-                " ORDER BY app."+DBContract.AppEntry.COLUMN_POSITION+" ASC";
+                "launcher."+DBContract.HomeAppEntry.COLUMN_PACKAGENAME+" = noti."+DBContract.NotificationEntry.COLUMN_PACKAGENAME+" " +
+                " ORDER BY launcher."+DBContract.HomeAppEntry.COLUMN_POSITION+" asc";
+
+        String nonLauncherNotificationsSQL = "SELECT " +
+                "noti."+DBContract.NotificationEntry.COLUMN_PACKAGENAME+", " +
+                "noti."+DBContract.NotificationEntry.COLUMN_NOTIFICATION+" " +
+                "FROM "+DBContract.NotificationEntry.TABLE_NAME+" noti " +
+                "LEFT JOIN " +
+                ""+DBContract.HomeAppEntry.TABLE_NAME+" launcher " +
+                "ON " +
+                "noti."+DBContract.NotificationEntry.COLUMN_PACKAGENAME+"=launcher."+DBContract.HomeAppEntry.COLUMN_PACKAGENAME+" " +
+                "WHERE launcher."+DBContract.HomeAppEntry.COLUMN_PACKAGENAME+" IS NULL";
+
+
+
+        String selectQuery = "SELECT apps."+DBContract.AppEntry.COLUMN_PACKAGENAME+", apps."+DBContract.AppEntry.COLUMN_NAME+", apps."+DBContract.AppEntry.COLUMN_LABEL+", launcherNotifications."+DBContract.NotificationEntry.COLUMN_NOTIFICATION+" " +
+                "FROM " +
+                "("+launcherNotificationsSQL+") launcherNotifications, " +
+                ""+DBContract.AppEntry.TABLE_NAME+" apps " +
+                "WHERE launcherNotifications.packageName=apps."+DBContract.AppEntry.COLUMN_PACKAGENAME+" " +
+                "UNION ALL " +
+                "SELECT apps."+DBContract.AppEntry.COLUMN_PACKAGENAME+", apps."+DBContract.AppEntry.COLUMN_NAME+", apps."+DBContract.AppEntry.COLUMN_LABEL+", nonLauncherNotifications."+DBContract.NotificationEntry.COLUMN_NOTIFICATION+" " +
+                "FROM ("+nonLauncherNotificationsSQL+") nonLauncherNotifications, "+DBContract.AppEntry.TABLE_NAME+" apps " +
+                "WHERE nonLauncherNotifications.packageName=apps."+DBContract.AppEntry.COLUMN_PACKAGENAME+"";
 
 
 
@@ -102,33 +73,101 @@ public class DBController {
                 String label=cursor.getString(0);
                 String name=cursor.getString(1);
                 String packageName=cursor.getString(2);
-                int position=cursor.getInt(3);
-                int notification=cursor.getInt(4);
+                int notification=cursor.getInt(3);
 
 
                 if(notification == 0) {
-                    appList.add(new LauncherApp(label, name, packageName));
+                    appList.add(new HomeApp(label, name, packageName,0));
                 } else {
-                    appList.add(new Notification(label, name, packageName, position));
+                    appList.add(new Notification(label, name, packageName, notification));
                 }
 
             } while (cursor.moveToNext());
         }
+        cursor.close();
         return appList;
 
     }
+    public ArrayList<RowType> getMenuApps() {
+
+        ArrayList<RowType> appList = new ArrayList<>();
+
+        String selectQuery = "SELECT " +
+                "app."+DBContract.AppEntry.COLUMN_PACKAGENAME+", " +
+                "app."+DBContract.AppEntry.COLUMN_NAME+", " +
+                "app."+DBContract.AppEntry.COLUMN_LABEL+", " +
+                "noti."+DBContract.NotificationEntry.COLUMN_NOTIFICATION+" " +
+                "FROM " +
+                ""+DBContract.AppEntry.TABLE_NAME+" app " +
+                "LEFT JOIN " +
+                ""+DBContract.NotificationEntry.TABLE_NAME+" noti " +
+                "ON noti."+DBContract.NotificationEntry.COLUMN_PACKAGENAME+"=app."+DBContract.AppEntry.COLUMN_PACKAGENAME+" " +
+                "ORDER BY app."+DBContract.AppEntry.COLUMN_LABEL+" ASC";
 
 
+        SQLiteDatabase baseDeDatos = dbHelper.getReadableDatabase();
+        Cursor cursor = baseDeDatos.rawQuery(selectQuery, null);
 
-    public int updateApp(LauncherApp app) {
+
+        if (cursor.moveToFirst()) {
+            do {
+                String packageName=cursor.getString(0);
+                String name=cursor.getString(1);
+                String label=cursor.getString(2);
+                int notification=cursor.getInt(3);
+
+
+                if(notification == 1) {
+                    appList.add(new Notification(packageName, name, label, notification));
+                } else {
+                    appList.add(new MenuApp(packageName, name, label));
+                }
+
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return appList;
+
+    }
+    public ArrayList<Header> getAlphabetApps() {
+
+        ArrayList<Header> headerList = new ArrayList<>();
+
+        String selectQuery = "SELECT " +
+                "DISTINCT " +
+                "substr(upper(app."+DBContract.AppEntry.COLUMN_LABEL+"),1,1) " +
+                "FROM " +
+                ""+DBContract.AppEntry.TABLE_NAME+" app";
+
+        SQLiteDatabase baseDeDatos = dbHelper.getReadableDatabase();
+        Cursor cursor = baseDeDatos.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                headerList.add(new Header(cursor.getString(0)));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return headerList;
+
+    }
+    public long getAppTableSize(String tableName) {
+        SQLiteDatabase db = dbHelper.getReadableDatabase();
+        long count = DatabaseUtils.queryNumEntries(db, tableName);
+        return count;
+    }
+
+    //APP
+    public long insertApp(String packagename, String name, String label) {
+
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues valuesForUpdate = new ContentValues();
-        valuesForUpdate.put(DBContract.AppEntry.COLUMN_LABEL, app.getLabel());
-        valuesForUpdate.put(DBContract.AppEntry.COLUMN_NAME, app.getName());
-        valuesForUpdate.put(DBContract.AppEntry.COLUMN_POSITION, app.getPosition());
-        String whereClause = DBContract.AppEntry.COLUMN_PACKAGENAME+" = ?";
-        String[] args = {String.valueOf(app.getPackageName())};
-        return db.update(DBContract.AppEntry.TABLE_NAME, valuesForUpdate, whereClause, args);
+        ContentValues values = new ContentValues();
+        values.put(DBContract.AppEntry.COLUMN_PACKAGENAME, packagename);
+        values.put(DBContract.AppEntry.COLUMN_NAME, name);
+        values.put(DBContract.AppEntry.COLUMN_LABEL, label);
+
+        return db.insert(DBContract.AppEntry.TABLE_NAME, null, values);
+
     }
     public int deleteApp(String packageName) {
 
@@ -138,12 +177,36 @@ public class DBController {
         return db.delete(DBContract.AppEntry.TABLE_NAME, whereClause, args);
     }
 
-    public void insertNotification(String packagename, int notification) {
+    //HOMEAPPS
+    public long insertHomeApp(String packagename) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(DBContract.HomeAppEntry.COLUMN_PACKAGENAME, packagename);
+        values.put(DBContract.HomeAppEntry.COLUMN_POSITION, getAppTableSize(DBContract.HomeAppEntry.TABLE_NAME));
+        return db.insertWithOnConflict(DBContract.HomeAppEntry.TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_IGNORE);
+    }
+    public int deleteHomeApp(String packageName) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        String whereClause = DBContract.HomeAppEntry.COLUMN_PACKAGENAME+" = ?";
+        String[] args = {String.valueOf(packageName)};
+        return db.delete(DBContract.HomeAppEntry.TABLE_NAME, whereClause, args);
+    }
+    public int updateHomeApp(String packageName, int position) {
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues valuesForUpdate = new ContentValues();
+        valuesForUpdate.put(DBContract.HomeAppEntry.COLUMN_POSITION, position);
+        String whereClause = DBContract.HomeAppEntry.COLUMN_PACKAGENAME+" = ?";
+        String[] args = {String.valueOf(packageName)};
+        return db.update(DBContract.HomeAppEntry.TABLE_NAME, valuesForUpdate, whereClause, args);
+    }
+
+    //NOTIFICATIONS
+    public long insertNotification(String packagename, int notification) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(DBContract.NotificationEntry.COLUMN_PACKAGENAME, packagename);
         values.put(DBContract.NotificationEntry.COLUMN_NOTIFICATION, notification);
-        db.insertWithOnConflict(DBContract.NotificationEntry.TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_REPLACE);
+        return db.insertWithOnConflict(DBContract.NotificationEntry.TABLE_NAME, null, values,SQLiteDatabase.CONFLICT_IGNORE);
     }
     public int deleteNotification(String packageName) {
         SQLiteDatabase db = dbHelper.getWritableDatabase();

@@ -8,20 +8,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DBHelper extends SQLiteOpenHelper {
 
     private static DBHelper dbHelper;
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 11;
     private static final String DATABASE_NAME = "CleanLauncherDB.db";
-
-
-
-
 
     public static synchronized DBHelper getInstance(Context c) {
         if (dbHelper == null) {
-            dbHelper = new DBHelper(c.getApplicationContext()); //fails here
+            dbHelper = new DBHelper(c.getApplicationContext());
         }
         return dbHelper;
     }
-
 
     private DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -31,6 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DBContract.AppEntry.createTablesql);
         db.execSQL(DBContract.NotificationEntry.createTablesql);
+        db.execSQL(DBContract.HomeAppEntry.createTablesql);
 
     }
 
@@ -38,6 +34,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DBContract.AppEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DBContract.NotificationEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + DBContract.HomeAppEntry.TABLE_NAME);
+
         onCreate(db);
     }
 

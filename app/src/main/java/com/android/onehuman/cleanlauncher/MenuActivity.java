@@ -8,21 +8,27 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.android.onehuman.cleanlauncher.adapter.HomeAdapter;
 import com.android.onehuman.cleanlauncher.adapter.MenuAdapter;
+import com.android.onehuman.cleanlauncher.events.HomeItemTouchHelper;
+import com.android.onehuman.cleanlauncher.interfaces.OnTaskCompleted;
 import com.android.onehuman.cleanlauncher.interfaces.RowType;
 import com.android.onehuman.cleanlauncher.model.Header;
-import com.android.onehuman.cleanlauncher.utils.Utils;
+import com.android.onehuman.cleanlauncher.persistence.DBController;
+import com.android.onehuman.cleanlauncher.task.PopulateDBAppsTask;
+import com.android.onehuman.cleanlauncher.utils.AppUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 
-public class MenuActivity extends AppCompatActivity {
+public class MenuActivity extends AppCompatActivity implements OnTaskCompleted {
 
     static Activity activity;
 
@@ -32,19 +38,19 @@ public class MenuActivity extends AppCompatActivity {
     PackageManager packageManager;
     private String selectHeader;
     private LinearLayoutManager linearLayoutManager;
-    private Utils utils;
+    private AppUtils appUtils;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu_activity);
         activity=this;
-        utils = new Utils(activity);
+        appUtils = new AppUtils(activity);
         packageManager =getPackageManager();
         menuRecyclerView = (RecyclerView) findViewById(R.id.menu_listview);
         linearLayoutManager=new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         menuRecyclerView.setLayoutManager(linearLayoutManager);
-        new initAppsList().execute();
+        new PopulateDBAppsTask(activity, this).execute();
 
     }
 
@@ -59,43 +65,16 @@ public class MenuActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
             selectHeader = data.getStringExtra("selectedHeader");
-            linearLayoutManager.scrollToPositionWithOffset(findPosition(selectHeader),0);
+            int position = menuAppsList.indexOf(new Header(selectHeader));
+            linearLayoutManager.scrollToPositionWithOffset(position,0);
         }
     }
 
-    public int findPosition(String headerLabel) {
-        int index=0;
-        for(index=0; index<menuAppsList.size(); index++) {
-            if(menuAppsList.get(index) instanceof Header) {
-                if (((Header) menuAppsList.get(index)).getLabel().equals(headerLabel)) {
-                    return index;
-                }
-            }
-        }
-        return index;
-    }
-
-
-    public class initAppsList extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            Intent mainIntent = new Intent(Intent.ACTION_MAIN,null);
-            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-            List<ResolveInfo> pacsList = packageManager.queryIntentActivities(mainIntent, 0);
-            Collections.sort(pacsList, new ResolveInfo.DisplayNameComparator(packageManager));
-            menuAppsList = new ArrayList<>();
-            menuAppsList = utils.generateMenuList(pacsList, packageManager);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(String result){
-            menuAdapter = new MenuAdapter(activity, menuAppsList);
-            menuRecyclerView.setAdapter(menuAdapter);
-
-        }
-
+    @Override
+    public void onTaskCompleted() {
+        menuAppsList = appUtils.generateMenuList();
+        menuAdapter = new MenuAdapter(activity, menuAppsList);
+        menuRecyclerView.setAdapter(menuAdapter);
     }
 
 }

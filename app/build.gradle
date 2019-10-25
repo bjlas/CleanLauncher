@@ -8,7 +8,7 @@ android {
         targetSdkVersion 19
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.home_notification_item.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.home_item_notification.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {

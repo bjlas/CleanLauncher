@@ -1,9 +1,13 @@
 <resources>
-    <string name="app_name">CleanLauncher</string>
+    <string name="title_app_name">CleanLauncher</string>
+    <string name="title_home_activity">Home</string>
+    <string name="title_menu_activity">Menu</string>
+    <string name="title_alphabet_activity">AlphabetMenu</string>
+    <string name="title_notification_service">NotificationService</string>
+
     <string name="uninstall_button">-</string>
     <string name="addtoHome_button">+</string>
     <string name="app_added_to_home">HOME+</string>
     <string name="app_already_exist_at_home">&#8707;</string>
-    <string name="home_notification">(!)</string>
-    <string name="title_activity_alphabetical_menu">AlphabeticalMenu</string>
+    <string name="notification_alert">(!)</string>
 </resources>

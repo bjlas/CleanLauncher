@@ -1,6 +1,6 @@
 package com.android.onehuman.cleanlauncher.model;
 
-public class Notification extends App{
+public class Notification extends MenuApp {
 
     private int notification;
 

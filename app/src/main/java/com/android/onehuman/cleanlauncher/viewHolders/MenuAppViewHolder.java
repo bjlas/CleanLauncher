@@ -13,9 +13,9 @@ public class MenuAppViewHolder extends RecyclerView.ViewHolder {
 
     public MenuAppViewHolder(View itemView) {
         super(itemView);
-        label = itemView.findViewById(R.id.menu_item_label);
+        label = itemView.findViewById(R.id.menu_item_notification_label);
         addToHomeButton = (TextView) itemView.findViewById(R.id.menu_item_addToHome_button);
-        uninstallButton = (TextView) itemView.findViewById(R.id.menu_item_uninstall_button);
+        uninstallButton = (TextView) itemView.findViewById(R.id.menu_item_notification_alert);
     }
 
 }
